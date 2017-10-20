@@ -222,7 +222,6 @@ Func ProcessGetCommandLine($pid, $strComputer = ".")
 		Return $sProcessCommandLine
 	Next
 	SetDebugLog("Process not found with PID " & $pid)
-	$Process = 0
 	CloseWmiObject()
 	Return SetError(1, 0, -1)
 EndFunc   ;==>ProcessGetCommandLine

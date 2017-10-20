@@ -186,16 +186,20 @@ Func CreateBotOptions()
 	   $g_hChkHideWhenMinimized = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkHideWhenMinimized", "Hide when minimized"), $x, $y, -1, -1)
 		   GUICtrlSetOnEvent(-1, "chkHideWhenMinimized")
 		   _GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkHideWhenMinimized_Info_01", "Hide bot window in taskbar when minimized.\r\nUse trayicon 'Show bot' to display bot window again."))
-		$y += 19
-		$g_hChkAutoResume = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkAutoResume", "Auto resume Bot after"), $x, $y + 2, -1, -1)
+	   $y += 19
+	   $g_hChkAutoResume = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkAutoResume", "Auto resume Bot after"), $x, $y + 2, -1, -1)
 			_GUICtrlSetTip(-1,GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkAutoResume_Info_01", "This will auto resume your bot after x minutes"))
 			GUICtrlSetOnEvent(-1, "chkAutoResume")
-		$g_hTxtAutoResumeTime = GUICtrlCreateInput("5",$x + 132, $y + 5, 30, 16, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
-		GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "min.", -1), $x + 167, $y + 6, 27, 15)
-		$y += 19
+	   $g_hTxtAutoResumeTime = GUICtrlCreateInput("5",$x + 132, $y + 5, 30, 16, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+		    GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "min.", -1), $x + 167, $y + 6, 27, 15)
+	   $y += 19
 	   $g_hChkUseRandomClick = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkUseRandomClick", "Random Click"), $x, $y, -1, -1)
 		   GUICtrlSetOnEvent(-1, "chkUseRandomClick")
-		$y += 19
+	   $y += 19
+	   $g_hChkLabCheck = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkLabCheck", "Disabled LabCheck"), $x, $y + 2, -1, -1)
+	       GUICtrlSetState(-1, $GUI_UNCHECKED)
+		   GUICtrlSetOnEvent(-1, "ChkLabCheck")
+	    	$y += 12
    GUICtrlSetPos($hGroup, $x - 20, $yGroup - 20, 255, (($y - $yGroup) / 19) * 25)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
@@ -210,7 +214,7 @@ Func CreateBotOptions()
 		   GUICtrlSetOnEvent(-1, "chkScreenshotHideName")
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-   $y +=48
+   $y += 43
    GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "Group_06", "Remote Device"), $x - 20, $y - 20 , 225, 42)
 	   $y -= 5
 	   GUICtrlCreateLabel(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "LblTimeAnotherDevice", "When 'Another Device' wait") & ":", $x - 10, $y + 2, -1, -1)
@@ -222,7 +226,7 @@ Func CreateBotOptions()
 	   GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "min.", -1), $x + 167, $y + 2, -1, -1)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-   $y+= 51
+   $y += 46
    GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "Group_07", "Other Options"), $x - 20, $y - 20, 225, 85)
 	  $g_hChkSinglePBTForced = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkSinglePBTForced", "Force Single PB logoff"), $x-5, $y, -1, -1)
 		  GUICtrlSetOnEvent(-1, "chkSinglePBTForced")

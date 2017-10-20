@@ -14,7 +14,15 @@
 	- Fixed the isMain for 11th August Update
 	- Fixed OpenCoC detected logic error
 	- Improved the TrainIT
-			
+	- Disabele Check Lab and Profile
+    - Add Inferno Lvl 5 to Weak Base Images/GUI settings, add Lvl 4 tile and lowered tolerance (7.2.5)	
+	- Lower Eagle Lvl 1 tolerance for better Weak Base detection (7.2.5)
+	- Add Bot / Android Option to select preferred Android Background Mode (7.2.4)
+	- Add Nox Dock Mode support (7.2.4)
+	- Add Bot / Android Option to select preferred Android Background Mode (7.2.4)
+    - Add BlueStacks2/3 and iTools support for ADB screencap Background Mode (7.2.4)
+    - Add KOPLAYER and Nox WinAPI/DirectX support for Background Mode (7.2.4)
+	
  				 Doc Oc v3.7.2                                                           
 	- Fixed the Loot OCR for 480000 , 600000 , 1000000
 	- Fixed the wait for Spells , when the Spell is in the Middle of the slot

@@ -158,9 +158,11 @@ Func ApplyConfig_Android($TypeReadSave)
 		Case "Read"
 			SetCurSelCmbCOCDistributors()
 			UpdateBotTitle()
+			_GUICtrlComboBox_SetCurSel($g_hCmbAndroidBackgroundMode, $g_iAndroidBackgroundMode)
 			_GUICtrlComboBox_SetCurSel($g_hCmbSuspendAndroid, AndroidSuspendFlagsToIndex($g_iAndroidSuspendModeFlags))
 		Case "Save"
 			cmbCOCDistributors()
+			cmbAndroidBackgroundMode()
 			cmbSuspendAndroid()
 	EndSwitch
 EndFunc   ;==>ApplyConfig_Android

@@ -23,21 +23,13 @@ Func OpenNox($bRestart = False)
 	If $launchAndroid Then
 		; Launch Nox
 		$cmdPar = GetAndroidProgramParameter()
-		SetDebugLog("ShellExecute: " & $g_sAndroidProgramPath & " " & $cmdPar)
-		$PID = ShellExecute($g_sAndroidProgramPath, $cmdPar, $__Nox_Path)
-		If _Sleep(1000) Then Return False
-		If $PID <> 0 Then $PID = ProcessExists($PID)
-		SetDebugLog("$PID= " & $PID)
-		If $PID = 0 Then ; IF ShellExecute failed
-			SetLog("Unable to load " & $g_sAndroidEmulator & ($g_sAndroidInstance = "" ? "" : "(" & $g_sAndroidInstance & ")") & ", please check emulator/installation.", $COLOR_ERROR)
-			SetLog("Unable to continue........", $COLOR_WARNING)
-			btnStop()
+		$PID = LaunchAndroid($g_sAndroidProgramPath, $cmdPar, $g_sAndroidPath)
+		If $PID = 0 Then
 			SetError(1, 1, -1)
 			Return False
 		EndIf
 	EndIf
 
-	SetLog("Please wait while " & $g_sAndroidEmulator & " and CoC start...", $COLOR_SUCCESS)
 	$hTimer = __TimerInit()
 
 	If WaitForRunningVMS($g_iAndroidLaunchWaitSec - __TimerDiff($hTimer) / 1000, $hTimer) Then Return False
@@ -67,14 +59,21 @@ Func OpenNox($bRestart = False)
 EndFunc   ;==>OpenNox
 
 Func IsNoxCommandLine($CommandLine)
-	SetDebugLog($CommandLine)
-	$CommandLine = StringReplace($CommandLine, GetNoxRtPath(), "")
-	$CommandLine = StringReplace($CommandLine, "Nox.exe", "")
-	Local $param1 = StringReplace(GetNoxProgramParameter(), """", "")
-	Local $param2 = StringReplace(GetNoxProgramParameter(True), """", "")
-	If StringInStr($CommandLine, $param1 & " ") > 0 Or StringRight($CommandLine, StringLen($param1)) = $param1 Then Return True
-	If StringInStr($CommandLine, $param2 & " ") > 0 Or StringRight($CommandLine, StringLen($param2)) = $param2 Then Return True
-	If StringInStr($CommandLine, "-clone:") = 0 And $param2 = "" Then Return True
+	; find instance in command line
+	Local $aRegexResult = StringRegExp($CommandLine, "-clone:(\b.+\b)", $STR_REGEXPARRAYMATCH)
+	If Not @error Then
+		Local $sInstance = $aRegexResult[0]
+		If $sInstance = $g_sAndroidInstance Or ($g_sAndroidInstance = $g_avAndroidAppConfig[$g_iAndroidConfig][1] And $sInstance = 'Nox_0') Then ; 'Nox_0' is MultiPlayerManager.exe launch support
+			SetDebugLog("IsNoxCommandLine, instance " & $g_sAndroidInstance & ", returns True for: " & $CommandLine)
+			Return True
+		EndIf
+	Else
+		If $g_sAndroidInstance = $g_avAndroidAppConfig[$g_iAndroidConfig][1] Then
+			SetDebugLog("IsNoxCommandLine, instance " & $g_sAndroidInstance & ", returns True for: " & $CommandLine)
+			Return True
+		EndIf
+	EndIf
+	SetDebugLog("IsNoxCommandLine, instance " & $g_sAndroidInstance & ", returns False for: " & $CommandLine)
 	Return False
 EndFunc   ;==>IsNoxCommandLine
 
@@ -127,6 +126,23 @@ Func GetNoxAdbPath()
 	Return ""
 EndFunc   ;==>GetNoxAdbPath
 
+Func GetNoxBackgroundMode()
+	; get OpenGL/DirectX config
+	Local $sConfig = GetNoxConfigFile()
+	If $sConfig Then
+		Local $graphic_engine_type = IniRead($sConfig, "setting", "graphic_engine_type", "") ; 0 = OpenGL, 1 = DirectX
+		Switch $graphic_engine_type
+			Case "0"
+				Return $g_iAndroidBackgroundModeOpenGL
+			Case "1"
+				Return $g_iAndroidBackgroundModeDirectX
+			Case Else
+				SetLog($g_sAndroidEmulator & " unsupported Graphics Engine Type " & $graphic_engine_type, $COLOR_WARNING)
+		EndSwitch
+	EndIf
+	Return 0
+EndFunc   ;==>GetNoxBackgroundMode
+
 Func InitNox($bCheckOnly = False)
 	Local $process_killed, $aRegExResult, $g_sAndroidAdbDeviceHost, $g_sAndroidAdbDevicePort, $oops = 0
 	Local $Version = RegRead($g_sHKLM & "\SOFTWARE" & $g_sWow6432Node & "\Microsoft\Windows\CurrentVersion\Uninstall\Nox\", "DisplayVersion")
@@ -170,6 +186,7 @@ Func InitNox($bCheckOnly = False)
 		If $g_sAndroidAdbPath = "" Then $g_sAndroidAdbPath = GetNoxAdbPath()
 		$g_sAndroidVersion = $Version
 		$__Nox_Path = $path
+		$g_sAndroidPath = $__Nox_Path
 		$__VBoxManage_Path = $VBoxFile
 		$aRegExResult = StringRegExp($__VBoxVMinfo, ".*host ip = ([^,]+), .* guest port = 5555", $STR_REGEXPARRAYMATCH)
 		If Not @error Then
@@ -204,10 +221,10 @@ Func InitNox($bCheckOnly = False)
 			$g_sAndroidPicturesHostPath = $aRegExResult[UBound($aRegExResult) - 1] & "\"
 		Else
 			; Check the shared folder 'Nox_share' , this is the default path on last version
-			If FileExists(@MyDocumentsDir & "\Nox_share\") then
+			If FileExists(@MyDocumentsDir & "\Nox_share\") Then
 				$g_bAndroidSharedFolderAvailable = True
 				$g_sAndroidPicturesHostPath = @MyDocumentsDir & "\Nox_share\Other\"
-				If not FileExists($g_sAndroidPicturesHostPath) then
+				If Not FileExists($g_sAndroidPicturesHostPath) Then
 					; Just in case of 'Other' Folder doesn't exist
 					DirCreate($g_sAndroidPicturesHostPath)
 				EndIf
@@ -219,17 +236,18 @@ Func InitNox($bCheckOnly = False)
 			EndIf
 		EndIf
 
-		$__VBoxGuestProperties = LaunchConsole($__VBoxManage_Path, "guestproperty enumerate " & $g_sAndroidInstance, $process_killed)
-
 		Local $v = GetVersionNormalized($g_sAndroidVersion)
 		For $i = 0 To UBound($__Nox_Config) - 1
 			Local $v2 = GetVersionNormalized($__Nox_Config[$i][0])
 			If $v >= $v2 Then
 				SetDebugLog("Using Android Config of " & $g_sAndroidEmulator & " " & $__Nox_Config[$i][0])
 				$g_sAppClassInstance = $__Nox_Config[$i][1]
+				$g_avAndroidAppConfig[$g_iAndroidConfig][3] = $g_sAppClassInstance
 				ExitLoop
 			EndIf
 		Next
+
+		UpdateHWnD($g_hAndroidWindow, False) ; Ensure $g_sAppClassInstance is properly set
 
 		; Update Android Screen and Window
 		;UpdateNoxConfig()
@@ -238,6 +256,15 @@ Func InitNox($bCheckOnly = False)
 	Return True
 
 EndFunc   ;==>InitNox
+
+Func GetNoxConfigFile()
+	Local $sLocalAppData = EnvGet("LOCALAPPDATA")
+	Local $sPre = ""
+	If $g_sAndroidInstance <> "nox" Then $sPre = "clone_" & $g_sAndroidInstance & "_"
+	Local $sConfig = $sLocalAppData & "\Nox\" & $sPre & "conf.ini"
+	If FileExists($sConfig) Then Return $sConfig
+	Return ""
+EndFunc   ;==>GetNoxConfigFile
 
 Func SetScreenNox()
 
@@ -261,11 +288,8 @@ Func SetScreenNox()
 	EndIf
 
 	; find Nox conf.ini in C:\Users\User\AppData\Local\Nox and set "Fix window size" to Enable, "Remember size and position" to Disable and screen res also
-	Local $sLocalAppData = EnvGet("LOCALAPPDATA")
-	Local $sPre = ""
-	If $g_sAndroidInstance <> "nox" Then $sPre = "clone_" & $g_sAndroidInstance & "_"
-	Local $sConfig = $sLocalAppData & "\Nox\" & $sPre & "conf.ini"
-	If FileExists($sConfig) Then
+	Local $sConfig = GetNoxConfigFile()
+	If $sConfig Then
 		SetDebugLog("Configure Nox screen config: " & $sConfig)
 		IniWrite($sConfig, "setting", "h_resolution", $g_iAndroidClientWidth & "x" & $g_iAndroidClientHeight)
 		IniWrite($sConfig, "setting", "h_dpi", "160")
@@ -396,9 +420,14 @@ Func EmbedNox($bEmbed = Default)
 		Local $c = $aWin[$i][1]
 		If $c = "Qt5QWindowToolSaveBits" Then
 			Local $aPos = WinGetPos($h)
-			If UBound($aPos) > 2 Then
-				; found toolbar
-				$hToolbar = $h
+			If UBound($aPos) > 3 Then
+				If $hToolbar = 0 And (($aPos[2] >= $g_iAndroidClientWidth And $aPos[3] > 7) Or ($aPos[2] > 7 And $aPos[3] >= $g_iAndroidClientHeight)) Then
+					; found toolbar
+					$hToolbar = $h
+				ElseIf $aPos[2] = 7 Or $aPos[3] = 7 Then
+					; found border, always hide it
+					WinMove2($h, "", -1, -1, -1, -1, $HWND_NOTOPMOST, $SWP_HIDEWINDOW, False)
+				EndIf
 			EndIf
 		EndIf
 	Next
@@ -412,8 +441,8 @@ Func EmbedNox($bEmbed = Default)
 		Next
 	Else
 		SetDebugLog("EmbedNox(" & $bEmbed & "): $hToolbar=" & $hToolbar, Default, True)
-		WinMove2($hToolbar, "", -1, -1, -1, -1, $HWND_NOTOPMOST, 0, False)
-		_WinAPI_ShowWindow($hToolbar, ($bEmbed ? @SW_HIDE : @SW_SHOWNOACTIVATE))
+		WinMove2($hToolbar, "", -1, -1, -1, -1, $HWND_NOTOPMOST, ($bEmbed ? $SWP_HIDEWINDOW : $SWP_SHOWWINDOW), False)
+		;_WinAPI_ShowWindow($hToolbar, ($bEmbed ? @SW_HIDE : @SW_SHOWNOACTIVATE))
 	EndIf
 
 EndFunc   ;==>EmbedNox

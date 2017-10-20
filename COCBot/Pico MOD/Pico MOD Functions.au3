@@ -20,6 +20,8 @@
 #include "Pico QuickMIS.au3"
 #include "Pico Four Finger Classic.au3"
 #include "Pico SendText.au3"
+#include "Pico ChkLab.au3"
+#include "Pico ChkProfileReport.au3"
 #include "Pico Attack Now.au3"
 #include "Pico GoblinXP\Pico GoblinXP.au3"
 #include "Pico GoblinXP\Pico multiSearch.au3"

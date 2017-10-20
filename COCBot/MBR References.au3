@@ -227,6 +227,8 @@ Func ReferenceFunctions()
 	returnLowestLevelSingleMatch(0)
 	updateGlobalVillageOffset(0, 0)
 	GemClickR(0, 0, 0)
+	GetMEmuBackgroundMode()
+	GetNoxBackgroundMode()
 EndFunc   ;==>ReferenceFunctions
 
 Func ReferenceGlobals()

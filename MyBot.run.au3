@@ -671,7 +671,9 @@ Func runBot() ;Bot that runs everything in order
 
 			; ProMac
 			; First is nececssary Check Army camp all values  , will give all INFO and Request CC if needed
-			ProfileReport()
+			If $g_iChkProfileReport = 0 Then
+			  ProfileReport()
+			EndIf
 			If _Sleep($DELAYRUNBOT5) Then Return
 			checkMainScreen(False)
 			checkArmyCamp(True, True, False, True)
@@ -1136,8 +1138,9 @@ Func _RunFunction($action)
 
 		Case "LabCheck"
 			Setlog("Checking Lab Status", $COLOR_INFO)
-			LabGuiDisplay()
-
+			If $g_iChkLabCheck = 0 Then
+			  LabGuiDisplay()
+            EndIf
 		Case "Laboratory"
 			Laboratory()
 			If _Sleep($DELAYRUNBOT3) = False Then checkMainScreen(False)

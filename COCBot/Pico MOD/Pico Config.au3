@@ -111,7 +111,10 @@ Func ReadConfig_PicoMod()
 	IniReadS($ichkSXBK, $g_sProfileConfigPath, "Pico GoblinXP", "SXBK", $eHeroNone)
 	IniReadS($ichkSXAQ, $g_sProfileConfigPath, "Pico GoblinXP", "SXAQ", $eHeroNone)
 	IniReadS($ichkSXGW, $g_sProfileConfigPath, "Pico GoblinXP", "SXGW", $eHeroNone)
-
+    
+	IniReadS($g_iChkLabCheck, $g_sProfileConfigPath, "Pico ChkLab", "ChkLabCheck", $g_iChkLabCheck, "Int")
+	IniReadS($g_iChkProfileReport, $g_sProfileConfigPath, "Pico ChkProfileReport", "ChkProfileReport", $g_iChkProfileReport, "Int")
+	
 EndFunc   ;==>ReadConfig_PicoMod
 
 Func SaveConfig_PicoMod()
@@ -211,7 +214,10 @@ Func SaveConfig_PicoMod()
 	_Ini_Add("Pico GoblinXP", "SXAQ", $ichkSXAQ)
 	_Ini_Add("Pico GoblinXP", "SXGW", $ichkSXGW)
 	_Ini_Add("Pico GoblinXP", "MaxXptoGain", GUICtrlRead($txtMaxXPtoGain))
-
+    
+    _Ini_Add("Pico ChkLab", "ChkLabCheck", $g_iChkLabCheck ? 1 : 0)
+	_Ini_Add("Pico ChkProfileReport", "ChkProfileReport", $g_iChkProfileReport ? 1 : 0)
+	
 EndFunc   ;==>SaveConfig_PicoMod
 
 Func ApplyConfig_PicoMod($TypeReadSave)
@@ -315,7 +321,10 @@ Func ApplyConfig_PicoMod($TypeReadSave)
 			$ichkSXAQ = (GUICtrlRead($chkSXAQ) = $GUI_CHECKED) ? $eHeroQueen : $eHeroNone
 			$ichkSXGW = (GUICtrlRead($chkSXGW) = $GUI_CHECKED) ? $eHeroWarden : $eHeroNone
 			$itxtMaxXPtoGain = Int(GUICtrlRead($txtMaxXPtoGain))
-
+            
+			$g_iChkLabCheck = GUICtrlRead($g_hChkLabCheck) = $GUI_CHECKED ? 1 : 0
+			$g_iChkProfileReport = GUICtrlRead($g_hChkProfileReport) = $GUI_CHECKED ? 1 : 0	
+			
 		Case "Read"
 
 			GUICtrlSetState($g_hChkRequestUnicode, $g_iChkRequestUnicode = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
@@ -448,7 +457,12 @@ Func ApplyConfig_PicoMod($TypeReadSave)
 			GUICtrlSetState($chkSXBK, $ichkSXBK = $eHeroKing ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($chkSXAQ, $ichkSXAQ = $eHeroQueen ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($chkSXGW, $ichkSXGW = $eHeroWarden ? $GUI_CHECKED : $GUI_UNCHECKED)
-
+            
+			GUICtrlSetState($g_hChkLabCheck, $g_iChkLabCheck = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkLabCheck()
+			GUICtrlSetState($g_hChkProfileReport, $g_iChkProfileReport = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkProfileReport()
+			
 	EndSwitch
 
 EndFunc   ;==>ApplyConfig_PicoMod

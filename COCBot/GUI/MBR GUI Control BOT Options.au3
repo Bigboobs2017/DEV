@@ -68,7 +68,8 @@ Func cmbLanguage()
 	$g_sLanguage = $aLanguageFile[$g_sLanguageIndex][0] ; the filename = 0, the display name = 1
 	MsgBox("", "", GetTranslatedFileIni("MBR Popups", "Func_cmbLanguage", "Restart Bot to load program with new language:") & " " & $aLanguageFile[$g_sLanguageIndex][1] & " (" & $g_sLanguage & ")")
 	IniWriteS($g_sProfileConfigPath, "other", "language", $g_sLanguage) ; save language before restarting
-	ShellExecute(@ScriptFullPath, $g_sProfileCurrentName & " " & $g_sAndroidEmulator & " " & $g_sAndroidInstance & " /r")
+	;ShellExecute(@ScriptFullPath, $g_sProfileCurrentName & " " & $g_sAndroidEmulator & " " & $g_sAndroidInstance & " /r")
+	RestartBot(False, False)
 EndFunc   ;==>cmbLanguage
 
 Func chkBotCustomTitleBarClick()
@@ -892,4 +893,3 @@ Func btnTestOcrMemory()
 	Next
 
 EndFunc   ;==>btnTestOcrMemory
-
