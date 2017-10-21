@@ -204,8 +204,8 @@ Func MainSuperXPHandler()
 			DonateCC(True)
 		EndIf
 
-		;checkMainScreen(False)
-		;If IsMainPage() Then Zoomout()
+		checkMainScreen(False)
+		If IsMainPage() Then Zoomout()
 
 		If $irbSXTraining = 1 Then CheckForFullArmy()
 		$g_canGainXP = ($g_iHeroAvailable <> $eHeroNone And (IIf($ichkSXBK = $eHeroNone, False, BitAND($g_iHeroAvailable, $eHeroKing) = $eHeroKing) Or IIf($ichkSXAQ = $eHeroNone, False, BitAND($g_iHeroAvailable, $eHeroQueen) = $eHeroQueen) Or IIf($ichkSXGW = $eHeroNone, False, BitAND($g_iHeroAvailable, $eHeroWarden) = $eHeroWarden) And IIf($irbSXTraining = 1, $g_bIsFullArmywithHeroesAndSpells = False, True) And $ichkEnableSuperXP = 1 And Number($iGainedXP) < Number($itxtMaxXPtoGain)))
@@ -744,8 +744,8 @@ EndFunc   ;==>WaitForNoClouds
 
 Func OpenGoblinPicnic()
 	If $DebugSX = 1 Then SetLog("SX|OpenGoblinPicnic", $COLOR_PURPLE)
-	Local $rOpenSinglePlayerPage = OpenSinglePlayerPage()
-	If $rOpenSinglePlayerPage = False Then
+	;Local $rOpenSinglePlayerPage = OpenSinglePlayerPage()
+	If OpenSinglePlayerPage() = False Then
 		SetLog("Failed to open Attack page, Single Player", $COLOR_RED)
 		SafeReturnSX()
 		Return False
@@ -756,56 +756,43 @@ Func OpenGoblinPicnic()
 		SafeReturnSX()
 		Return False
 	EndIf
+	
 	If $DebugSX = 1 Then SetLog("SX|OGP|Clicking On GP Text: " & $rDragToGoblinPicnic[0] & ", " & $rDragToGoblinPicnic[1])
 	Click($rDragToGoblinPicnic[0], $rDragToGoblinPicnic[1]) ; Click On Goblin Picnic Text To Show Attack Button
 	Local $Counter = 0
-	While _ColorCheck(_GetPixelColor(621, 665, True), Hex(0xFFFFFF, 6), 10) = False Or _ColorCheck(_GetPixelColor(663, 662, True), Hex(0xFFFFFF, 6), 10) = False ; Wait for Attack Button
+
+	While _ColorCheck(_GetPixelColor($rDragToGoblinPicnic[0], $rDragToGoblinPicnic[1] + 88, True), Hex(0xF14E15, 6), 30) = False
 		If _Sleep(50) Then ExitLoop
+		;Setlog("waiting for button color")
 		$Counter += 1
-		If $Counter > 200 Then ExitLoop
-	WEnd
-	If $Counter > 200 Then
-		SetLog("Available loot info didn't Displayed!", $COLOR_RED)
-		SafeReturnSX()
-		Return False
-	EndIf
-	$Counter = 0
-	While _ColorCheck(_GetPixelColor($rDragToGoblinPicnic[0], $rDragToGoblinPicnic[1] + 78, True), Hex(0xE04A00, 6), 30) = False
-		If _Sleep(50) Then ExitLoop
-		Click($rDragToGoblinPicnic[0], $rDragToGoblinPicnic[1]) ; Click On Goblin Picnic Text To Show Attack Button
-		$Counter += 1
-		If $Counter > 200 Then ExitLoop
-	WEnd
-	If $Counter > 200 Then
-		If IsGoblinPicnicLocked($rDragToGoblinPicnic) = True Then
-			SetLog("Are you kidding me? Goblin Picnic is Locked", $COLOR_RED)
-			DisableSX()
+		If $Counter > 200 Then 
+			If IsGoblinPicnicLocked($rDragToGoblinPicnic) = True Then
+				SetLog("Are you kidding me? Goblin Picnic is Locked", $COLOR_RED)
+				DisableSX()
+				SafeReturnSX()
+				Return False
+			EndIf
+			SetLog("Attack Button Cannot be Verified", $COLOR_RED)
+			DebugImageSave("SuperXP_", True, "png", True, String(Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1], 2) & @CRLF & Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1] + 78, 2)), 80, 145, 35, $rDragToGoblinPicnic[0] - 5, $rDragToGoblinPicnic[1] - 5 + 78, 10, 10)
 			SafeReturnSX()
 			Return False
 		EndIf
-		SetLog("Attack Button Cannot be Verified", $COLOR_RED)
-		;DebugImageSave("SuperXP_", True, "png", True, String(Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1], 2) & @CRLF & Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1] + 78, 2)), 80, 145, 35, $rDragToGoblinPicnic[0] - 5, $rDragToGoblinPicnic[1] - 5 + 78, 10, 10)
-		SafeReturnSX()
-		Return False
-	EndIf
-	If $DebugSX = 1 Then
-		SetLog("SX|OGP|Clicking On Attack Btn: " & $rDragToGoblinPicnic[0] & ", " & $rDragToGoblinPicnic[1] + 78)
-	EndIf
+	WEnd
 
+	If $DebugSX = 1 Then SetLog("SX|OGP|Clicking On Attack Btn: " & $rDragToGoblinPicnic[0] & ", " & $rDragToGoblinPicnic[1] + 78)
 	Click($rDragToGoblinPicnic[0], $rDragToGoblinPicnic[1] + 78) ; Click On Attack Button
 
 	$Counter = 0
 	While IsInSPPage()
 		If _Sleep(50) Then ExitLoop
 		$Counter += 1
-		If $Counter > 150 Then ExitLoop
+		If $Counter > 150 Then 
+			SetLog("Still in SinglePlayer Page!! Something Strange Happened", $COLOR_RED)
+			;DebugImageSave("SuperXP_", True, "png", True, String(Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1], 2) & @CRLF & Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1] + 78, 2)), 80, 145, 35, $rDragToGoblinPicnic[0] - 5, $rDragToGoblinPicnic[1] - 5 + 78, 10, 10)
+			$g_canGainXP = False
+			Return False
+		EndIf
 	WEnd
-	If $Counter >= 150 Then
-		SetLog("Still in SinglePlayer Page!! Something Strange Happened", $COLOR_RED)
-		;DebugImageSave("SuperXP_", True, "png", True, String(Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1], 2) & @CRLF & Number($rDragToGoblinPicnic[0], 2) & ", " & Number($rDragToGoblinPicnic[1] + 78, 2)), 80, 145, 35, $rDragToGoblinPicnic[0] - 5, $rDragToGoblinPicnic[1] - 5 + 78, 10, 10)
-		$g_canGainXP = False
-		Return False
-	EndIf
 
 	#CS          Not Sure If This Checks Are Needed
 		Local $result = getAttackDisable(346, 182) ; Grab Ocr for TakeABreak check
