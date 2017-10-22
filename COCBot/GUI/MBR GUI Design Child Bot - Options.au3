@@ -164,7 +164,7 @@ Func CreateBotOptions()
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
    Local $x = 240, $y = 45, $yGroup = $y
-   Local $hGroup = GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "Group_04", "Advanced"), $x - 20, $y - 20, 0, 0)
+   Local $hGroup = GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "Group_04", "Advanced"), $x - 20, $y - 20, 225, 140)
 	   #cs
 	   $g_hChkUpdatingWhenMinimized = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkUpdatingWhenMinimized", "Updating when minimized"), $x, $y, -1, -1)
 		   GUICtrlSetState(-1, $GUI_DISABLE) ; must be always enabled
@@ -200,7 +200,7 @@ Func CreateBotOptions()
 	       GUICtrlSetState(-1, $GUI_UNCHECKED)
 		   GUICtrlSetOnEvent(-1, "ChkLabCheck")
 	    	$y += 12
-   GUICtrlSetPos($hGroup, $x - 20, $yGroup - 20, 255, (($y - $yGroup) / 19) * 25)
+   ;GUICtrlSetPos($hGroup, $x - 20, $yGroup - 20, 250, (($y - $yGroup) / 19) * 25)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
    $y += 30

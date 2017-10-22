@@ -100,8 +100,11 @@ Func CreateBotProfiles()
 			GUICtrlSetOnEvent(-1, "btnRenameConfirm")
 			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "BtnRenameProfile_Info_01", "Rename Profile"))
 
-		$g_hChkRequestUnicode = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "ChkRequestUnicode", "Use Unicode"), $x+250, $y + 3)
+		$g_hChkRequestUnicode = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "ChkRequestUnicode", "Use Unicode"), $x + 250, $y)
 			_GUICtrlSetTip(-1,"Requests using Unicode [only MEmu] , essential for some languages, Persian , Cyrillic etc")
 			GUICtrlSetOnEvent(-1, "chkUnicode")
+		$g_hChkProfileReport = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "ChkProfileReport", "Disabled Profile Check"), $x + 250, $y + 25)
+	    GUICtrlSetState(-1, $GUI_UNCHECKED)
+		GUICtrlSetOnEvent(-1, "ChkProfileReport")
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 EndFunc
