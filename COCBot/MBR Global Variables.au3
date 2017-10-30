@@ -197,6 +197,8 @@ Global $g_sAndroidGameClass = ".GameApp" ; Default CoC Game Class, loaded from c
 Global $g_sUserGameDistributor = "Google" ; User Added CoC Game Distributor, loaded from config.ini
 Global $g_sUserGamePackage = "com.supercell.clashofclans" ; User Added CoC Game Package, loaded from config.ini
 Global $g_sUserGameClass = ".GameApp" ; User Added CoC Game Class, loaded from config.ini
+Global $g_hAndroidLaunchTime = 0 ; __TimerInit() when Android was last launched
+Global $g_iAndroidRebootHours = 24 ; Default hours when Android gets automatically rebooted
 
 ; embed
 Global Const $g_bAndroidShieldPreWin8 = (_WinAPI_GetVersion() < 6.2) ; Layered Child Window only support for WIN_8 and later
@@ -365,9 +367,13 @@ Global $g_iAndroidAdbScreencapHeight = 0 ; Height of last captured screenshot (a
 Global $g_iAndroidAdbClickGroup = 10 ; 1 Disables grouping clicks; > 1 number of clicks fired at once (e.g. when Click with $times > 1 used) (Experimental as some clicks might get lost!); can be overridden via the ini file
 Global Const $g_iAndroidAdbClickGroupDelay = 50 ; Additional delay in Milliseconds after group of ADB clicks sent (sleep in Android is executed!)
 Global $g_bAndroidAdbKeepClicksActive = False ; Track KeepClicks mode regardless of enabled or not (poor mans deploy troops detection)
+Global $g_aiAndroidTimeLag[6] = [0, 0, 0, 0, 0, 0] ; Timer varibales for time lag calculation
+Global Const $g_iAndroidTimeLagThreshold = 5 ; Time lag Seconds per Minute when Android gets restarted
+Global Const $g_iAndroidTimeLagRebootThreshold = 2 ; Reboot Andoid after # of time lag problems
+Global Const $g_iAndroidTimeLagResetProblemCountMinutes = 5 ; Reset time lag problem count after specified Minutes
 
 Global $g_aiAndroidTimeLag[4] = [0, 0, 0, 0] ; Timer varibales for time lag calculation
-Global Const $g_iAndroidTimeLagThreshold = 5 ; Time lag Seconds per Minute when CoC gets restarted
+;Global Const $g_iAndroidTimeLagThreshold = 5 ; Time lag Seconds per Minute when CoC gets restarted
 
 Global Const $g_iAndroidRebootPageErrorCount = 5 ; Reboots Android automatically after so many IsPage errors (uses $AndroidPageError[0] and $g_iAndroidRebootPageErrorPerMinutes)
 Global Const $g_iAndroidRebootPageErrorPerMinutes = 10 ; Reboot Android if $AndroidPageError[0] errors occurred in $g_iAndroidRebootPageErrorPerMinutes Minutes
@@ -525,6 +531,7 @@ Global $g_bBotMoveRequested = False ; should the bot be moved
 Global $g_bBotShrinkExpandToggleRequested = False ; should the bot be slided
 Global $g_bRestart = False
 Global $g_bRunState = False
+Global $g_bIdleState = False ; bot is in Idle() routine waiting for things to finish
 Global $g_bBtnAttackNowPressed = False ; Set to true if any of the 3 attack now buttons are pressed
 Global $g_iCommandStop = -1
 Global $g_bMeetCondStop = False
@@ -542,6 +549,8 @@ Global $g_bGForcePBTUpdate = False
 Global $g_bQuicklyFirstStart = True
 Global $g_bQuickAttack = False
 Global $g_sTimeBeforeTrain = ""
+Global $g_hAttackTimer = 0 ; Timer for knowing when attack starts, in 30 Sec. attack automatically starts and lasts for 3 Minutes
+Global $g_iAttackTimerOffset = Default ; Offset of timer to attack really started
 
 ; -1 = don't use red line, 0 = ImgLoc raw red line routine (default), 1 = New ImgLoc based deployable red line routine, 2 = Original red line routine
 Global Const $REDLINE_IMGLOC_RAW = 0

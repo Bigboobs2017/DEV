@@ -148,6 +148,7 @@
 #include "functions\Android\ZoomOut.au3"
 #include "functions\Android\checkAndroidTimeLag.au3"
 #include "functions\Android\checkAndroidPageError.au3"
+#include "functions\Android\CheckAndroidRebootCondition.au3"
 #include "functions\Android\OpenBlueStacks.au3"
 #include "functions\Android\CloseBlueStacks.au3"
 #include "functions\Android\OpenDroid4X.au3"

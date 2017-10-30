@@ -159,10 +159,12 @@ Func ApplyConfig_Android($TypeReadSave)
 			SetCurSelCmbCOCDistributors()
 			UpdateBotTitle()
 			_GUICtrlComboBox_SetCurSel($g_hCmbAndroidBackgroundMode, $g_iAndroidBackgroundMode)
+			GUICtrlSetData($g_hTxtAndroidRebootHours, $g_iAndroidRebootHours)
 			_GUICtrlComboBox_SetCurSel($g_hCmbSuspendAndroid, AndroidSuspendFlagsToIndex($g_iAndroidSuspendModeFlags))
 		Case "Save"
 			cmbCOCDistributors()
 			cmbAndroidBackgroundMode()
+			$g_iAndroidRebootHours = Int(GUICtrlRead($g_hTxtAndroidRebootHours)) ; Hours are entered
 			cmbSuspendAndroid()
 	EndSwitch
 EndFunc   ;==>ApplyConfig_Android

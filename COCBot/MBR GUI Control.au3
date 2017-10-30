@@ -179,11 +179,11 @@ Func SetAccelerators($bDockedUnshieledFocus = False)
    EndIf
 EndFunc   ;==>SetAccelerators
 
-Func AndroidToFront()
+;Func AndroidToFront()
 	;SetDebugLog("BotToFront")
-	WinMove2(GetAndroidDisplayHWnD(), "", -1, -1, -1, -1, $HWND_TOPMOST, 0, False)
-	WinMove2(GetAndroidDisplayHWnD(), "", -1, -1, -1, -1, $HWND_NOTOPMOST, 0, False)
-EndFunc   ;==>AndroidToFront
+;	WinMove2(GetAndroidDisplayHWnD(), "", -1, -1, -1, -1, $HWND_TOPMOST, 0, False)
+;	WinMove2(GetAndroidDisplayHWnD(), "", -1, -1, -1, -1, $HWND_NOTOPMOST, 0, False)
+;EndFunc   ;==>AndroidToFront
 
 Func DisableProcessWindowsGhosting()
 	DllCall($g_hLibUser32DLL, "none", "DisableProcessWindowsGhosting")
