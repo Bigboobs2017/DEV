@@ -16,8 +16,8 @@
 
 Func ReArm()
 
-	If $g_bChkTrap = False Then Return ; If re-arm is not enable in GUI return and skip this code
-	If $g_abNotNeedAllTime[0] = False Then Return
+	If Not $g_bChkTrap Then Return ; If re-arm is not enable in GUI return and skip this code
+	If Not $g_abNotNeedAllTime[0] Then Return
 
 	SetLog("Checking if Village needs Rearming..", $COLOR_INFO)
 
@@ -27,14 +27,14 @@ Func ReArm()
 	$ImagesToUse[0] = @ScriptDir & "\imgxml\rearm\Traps_0_90.xml"
 	$ImagesToUse[1] = @ScriptDir & "\imgxml\rearm\Xbow_0_90.xml"
 	$ImagesToUse[2] = @ScriptDir & "\imgxml\rearm\Inferno_0_90.xml"
-	$g_fToleranceImgLoc = 0.90
+	;$g_fToleranceImgLoc = 0.90
 	Local $locate = 0
 	Local $t = 0
 	;--- End -----
 
 	;- Verifying The TH Coordinates -
 	If isInsideDiamond($g_aiTownHallPos) = False Then
-		LocateTownHall(True) ; get only new TH location during rearm, due BotFirstDetect now must have TH or there is an error.
+	    LocateTownHall(True) ; get only new TH location during rearm, due BotFirstDetect now must have TH or there is an error.
 		SaveConfig()
 		If _Sleep($DELAYREARM3) Then Return
 	EndIf
@@ -72,7 +72,7 @@ Func ReArm()
 							If _Sleep($DELAYREARM1) Then Return
 							Click(515, 400, 1, 0, "#0226")
 							If _Sleep($DELAYREARM4) Then Return
-							If isGemOpen(True) = True Then
+							If isGemOpen(True) Then
 								Setlog("Not enough loot to rearm traps.....", $COLOR_ERROR)
 								Click(585, 252, 1, 0, "#0227") ; Click close gem window "X"
 								If _Sleep($DELAYREARM1) Then Return

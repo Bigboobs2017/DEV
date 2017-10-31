@@ -29,7 +29,8 @@
     - Improve ADB Click&Drag for input drag mode (when not accurate Click&Drag script is used) (7.3)
     - Add automatic Android reboot after configured run-time hours (default is 24) to prevent severy Android issues like memory leak, graphics error etc. (7.3)
     - Add /? command line option to show help on additonal command line paramter and options (7.3)
-
+    - Improve village measuring with secondary images to fix zoom out loop when village cannot be measured (7.3)
+	
  				 Doc Oc v3.7.2                                                           
 	- Fixed the Loot OCR for 480000 , 600000 , 1000000
 	- Fixed the wait for Spells , when the Spell is in the Middle of the slot

@@ -647,7 +647,7 @@ Func runBot() ;Bot that runs everything in order
 			$g_bQuickAttack = QuickAttack()
 		EndIf
 
-		If checkAndroidReboot() = True Then ContinueLoop
+		If CheckAndroidReboot() = True Then ContinueLoop
 		If $g_bIsClientSyncError = False And $g_bIsSearchLimit = False And ($g_bQuickAttack = False) Then
 			If BotCommand() Then btnStop()
 			If _Sleep($DELAYRUNBOT2) Then Return
@@ -713,7 +713,7 @@ Func runBot() ;Bot that runs everything in order
 						_RunFunction($aRndFuncList[0])
 						ExitLoop
 					EndIf
-					If checkAndroidReboot() = True Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
+					If CheckAndroidReboot() = True Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
 				WEnd
 				If $g_bRunState = False Then Return
 				If $g_bRestart = True Then ContinueLoop
@@ -749,7 +749,7 @@ Func runBot() ;Bot that runs everything in order
 					_RunFunction($aRndFuncList[0])
 					ExitLoop
 				EndIf
-				If checkAndroidReboot() = True Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
+				If CheckAndroidReboot() = True Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
 			WEnd
 			If $g_bRunState = False Then Return
 			If $g_bRestart = True Then ContinueLoop
@@ -818,7 +818,7 @@ Func Idle() ;Sequence that runs until Full Army
 	While ($g_bIsFullArmywithHeroesAndSpells = False) Or (CheckDelayStayOnAccount() = True)
 		; ================================================== ADDITION BY ROROTITI - PICO MOD ================================================== ;
 
-		checkAndroidReboot()
+		CheckAndroidReboot()
 
 		;Execute Notify Pending Actions
 		NotifyPendingActions()
@@ -851,7 +851,7 @@ Func Idle() ;Sequence that runs until Full Army
 
 				If _Sleep($DELAYIDLE2) Then ExitLoop
 				If $g_bRestart = True Then ExitLoop
-				If checkAndroidReboot() Then ContinueLoop 2
+				If CheckAndroidReboot() Then ContinueLoop 2
 			WEnd
 		EndIf
 		If _Sleep($DELAYIDLE1) Then ExitLoop
@@ -873,7 +873,7 @@ Func Idle() ;Sequence that runs until Full Army
 			While 1
 				If $g_bRunState = False Then Return
 				If $g_bRestart = True Then ExitLoop
-				If checkAndroidReboot() Then ContinueLoop 2
+				If CheckAndroidReboot() Then ContinueLoop 2
 				If UBound($aRndFuncList) > 1 Then
 					Local $Index = Random(0, UBound($aRndFuncList), 1)
 					If $Index > UBound($aRndFuncList) - 1 Then $Index = UBound($aRndFuncList) - 1
