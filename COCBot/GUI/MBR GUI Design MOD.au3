@@ -78,7 +78,7 @@ Global $g_hGUI_MOD = 0
 ; For future child Tabs
 ; #include "MBR GUI Design Child MOD - ITEMXXX.au3"
 ; The Child Tabs
-Global $g_hGUI_MOD_TAB = 0, $g_hGUI_MOD_TAB_ITEM1 = 0, $g_hGUI_MOD_TAB_ITEM2 = 0, $g_hGUI_MOD_TAB_ITEM3 = 0, $g_hGUI_MOD_TAB_ITEM4 = 0, $g_hGUI_MOD_TAB_ITEM5 = 0, $g_hGUI_MOD_TAB_ITEM6 = 0
+Global $g_hGUI_MOD_TAB = 0, $g_hGUI_MOD_TAB_ITEM1 = 0, $g_hGUI_MOD_TAB_ITEM2 = 0, $g_hGUI_MOD_TAB_ITEM3 = 0, $g_hGUI_MOD_TAB_ITEM4 = 0, $g_hGUI_MOD_TAB_ITEM5 = 0, $g_hGUI_MOD_TAB_ITEM6 = 0, $g_hGUI_MOD_TAB_ITEM7 = 0
 
 Func CreateMODTab()
 
@@ -99,6 +99,8 @@ Func CreateMODTab()
 	TabItem5()
     $g_hGUI_MOD_TAB_ITEM6 = GUICtrlCreateTabItem("Goblin XP")
     TabItem6()
+	$g_hGUI_MOD_TAB_ITEM7 = GUICtrlCreateTabItem("Forecast")
+    TabItem7()
 	; needed to init the window now, like if it's a tab
 	CreateDropOrderGUI()
 
@@ -625,3 +627,84 @@ Func TabItem6()
 
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 EndFunc   ;==>TabItem6
+
+Func TabItem7()
+
+    Global $g_alblSwitchto
+	
+    Local $sTxtTip = ""
+	Local $xStart = 0, $yStart = 0
+	Local $x = $xStart + 10, $y = $yStart + 25
+	$ieForecast = GUICtrlCreateObj($oIE, $x , $y , 430, 310)
+
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+$y += + 318
+	$chkForecastBoost = GUICtrlCreateCheckbox("Boost When >", $x, $y, -1, -1)
+		$sTxtTip = "Boost Barracks,Heroes, when the loot index."
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetOnEvent(-1, "chkForecastBoost")
+	$txtForecastBoost = GUICtrlCreateInput("6.0", $x + 90, $y + 2, 30, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER))
+		$sTxtTip =  "Minimum loot index for boosting."
+		GUICtrlSetLimit(-1, 3)
+		GUICtrlSetTip(-1, $sTxtTip)
+		_GUICtrlEdit_SetReadOnly(-1, True)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	$y += - 27
+	$chkForecastHopingSwitchMax = GUICtrlCreateCheckbox("", $x + 150, $y + 27, 13, 13)
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetOnEvent(-1, "chkForecastHopingSwitchMax")
+		$g_alblSwitchto = GUICtrlCreateLabel("Switch to", $x + 168, $y + 27, -1, -1)
+	$cmbForecastHopingSwitchMax = GUICtrlCreateCombo("", $x + 218, $y + 25, 95, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+	$lblForecastHopingSwitchMax = GUICtrlCreateLabel("When Index <", $x + 316, $y + 28, -1, -1)
+	$txtForecastHopingSwitchMax = GUICtrlCreateInput("2.5", $x + 400, $y + 26, 30, 20, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER))
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+		GUICtrlSetLimit(-1, 3)
+		GUICtrlSetData(-1, 2.5)
+		GUICtrlSetTip(-1, $sTxtTip)
+		_GUICtrlEdit_SetReadOnly(-1, True)
+	$chkForecastHopingSwitchMin = GUICtrlCreateCheckbox("", $x + 150, $y + 55, 13, 13)
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetOnEvent(-1, "chkForecastHopingSwitchMin")
+		$g_alblSwitchto = GUICtrlCreateLabel("Switch to", $x + 168, $y + 55, -1, -1)
+	$cmbForecastHopingSwitchMin = GUICtrlCreateCombo("", $x + 218, $y + 53, 95, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+	$lblForecastHopingSwitchMin = GUICtrlCreateLabel("When Index >", $x + 316, $y + 58, -1, -1)
+	$txtForecastHopingSwitchMin = GUICtrlCreateInput("2.5", $x + 400, $y + 54, 30, 20, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER))
+		$sTxtTip = "" ; Information
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+		GUICtrlSetLimit(-1, 3)
+		GUICtrlSetData(-1, 2.5)
+		GUICtrlSetTip(-1, $sTxtTip)
+		_GUICtrlEdit_SetReadOnly(-1, True)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	setupProfileComboBox()
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	$chkForecastPause = GUICtrlCreateCheckbox("Halt when below", $x, $y + 50, -1, -1)
+		$sTxtTip = "Halt attacks when the loot index is below the specified value."
+		GUICtrlSetTip(-1, $sTxtTip)
+		GUICtrlSetOnEvent(-1, "chkForecastPause")
+	$txtForecastPause = GUICtrlCreateInput("2.0", $x + 100, $y + 50, 30, 20, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER))
+		$sTxtTip =  "Minimum loot index for halting attacks."
+		GUICtrlSetLimit(-1, 3)
+		GUICtrlSetTip(-1, $sTxtTip)
+		_GUICtrlEdit_SetReadOnly(-1, True)
+		GUICtrlSetState(-1, $GUI_DISABLE)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	$cmbSwLang = GUICtrlCreateCombo("", $x, $y + 75, 45, 45, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+		GUICtrlSetData(-1, "EN" & "|" & "RU" & "|" & "FR" & "|" & "DE" & "|" & "ES" & "|" & "FA" & "|" & "PT" & "|" & "IN", "EN")
+		GUICtrlSetOnEvent(-1, "cmbSwLang")
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+EndFunc   ;==>TabItem7

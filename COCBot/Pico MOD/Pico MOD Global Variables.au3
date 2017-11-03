@@ -154,3 +154,26 @@ Global $g_iChkLabCheck = 0
 Global $g_hChkLabCheck = 0
 Global $g_iChkProfileReport = 0
 Global $g_hChkProfileReport = 0
+
+
+; Forecast - (modification by rulesss,kychera)
+Global Const $COLOR_DEEPPINK = 0xFF1493
+Global Const $COLOR_DARKGREEN = 0x006400
+Global $oIE = ObjCreate("Shell.Explorer.2")
+Global $grpForecast
+Global $ieForecast
+Global $dtStamps[0]
+Global $lootMinutes[0]
+Global $timeOffset = 0
+Global $TimerForecast = 0
+Global $lootIndexScaleMarkers
+Global $currentForecast
+Global $chkForecastBoost = 0, $txtForecastBoost = 0
+Global $iChkForecastBoost = 0, $iTxtForecastBoost = 6
+Global $chkForecastPause = 0, $txtForecastPause = 0
+Global $iChkForecastPause = 0, $iTxtForecastPause = 2
+Global $cmbForecastHopingSwitchMax = 0, $cmbForecastHopingSwitchMin = 0
+Global $chkForecastHopingSwitchMax = 0, $lblForecastHopingSwitchMax = 0, $txtForecastHopingSwitchMax = 2, $chkForecastHopingSwitchMin = 0, $lblForecastHopingSwitchMin = 0, $txtForecastHopingSwitchMin = 0
+Global $ichkForecastHopingSwitchMax = 0, $icmbForecastHopingSwitchMax = 0 , $itxtForecastHopingSwitchMax = 2, $ichkForecastHopingSwitchMin = 0, $icmbForecastHopingSwitchMin = 0, $itxtForecastHopingSwitchMin = 2
+Global $icmbSwLang = 0
+Global $cmbSwLang = 0

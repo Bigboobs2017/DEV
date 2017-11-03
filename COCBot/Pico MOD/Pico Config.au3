@@ -115,6 +115,21 @@ Func ReadConfig_PicoMod()
 	IniReadS($g_iChkLabCheck, $g_sProfileConfigPath, "Pico ChkLab", "ChkLabCheck", $g_iChkLabCheck, "Int")
 	IniReadS($g_iChkProfileReport, $g_sProfileConfigPath, "Pico ChkProfileReport", "ChkProfileReport", $g_iChkProfileReport, "Int")
 	
+	; ================================================== Forecast PART ================================================== ;
+	
+	IniReadS($iChkForecastBoost, $g_sProfileConfigPath, "Pico Forecast", "chkForecastBoost", 0, "Int")
+	IniReadS($iChkForecastPause, $g_sProfileConfigPath, "Pico Forecast", "chkForecastPause", 0, "Int")
+	IniReadS($iTxtForecastBoost, $g_sProfileConfigPath, "Pico Forecast", "txtForecastBoost", 6, "Int")
+	IniReadS($iTxtForecastPause, $g_sProfileConfigPath, "Pico Forecast", "txtForecastPause", 2, "Int")
+	IniReadS($ichkForecastHopingSwitchMax, $g_sProfileConfigPath, "Pico Forecast", "chkForecastHopingSwitchMax", 0, "Int")
+	IniReadS($icmbForecastHopingSwitchMax, $g_sProfileConfigPath, "Pico Forecast", "cmbForecastHopingSwitchMax", 0, "Int")
+	IniReadS($itxtForecastHopingSwitchMax, $g_sProfileConfigPath, "Pico Forecast", "txtForecastHopingSwitchMax", 2, "Int")
+	IniReadS($ichkForecastHopingSwitchMin, $g_sProfileConfigPath, "Pico Forecast", "chkForecastHopingSwitchMin", 0, "Int")
+	IniReadS($icmbForecastHopingSwitchMin, $g_sProfileConfigPath, "Pico Forecast", "cmbForecastHopingSwitchMin", 0, "Int")
+	IniReadS($itxtForecastHopingSwitchMin, $g_sProfileConfigPath, "Pico Forecast", "txtForecastHopingSwitchMin", 2, "Int")
+	IniReadS($icmbSwLang, $g_sProfileConfigPath, "Pico Forecast", "cmbSwLang", 1, "int")
+	
+	
 EndFunc   ;==>ReadConfig_PicoMod
 
 Func SaveConfig_PicoMod()
@@ -217,6 +232,20 @@ Func SaveConfig_PicoMod()
     
     _Ini_Add("Pico ChkLab", "ChkLabCheck", $g_iChkLabCheck ? 1 : 0)
 	_Ini_Add("Pico ChkProfileReport", "ChkProfileReport", $g_iChkProfileReport ? 1 : 0)
+	
+	; ================================================== Forecast PART ================================================== ;
+	
+	_Ini_Add("Pico Forecast", "txtForecastBoost", GUICtrlRead($txtForecastBoost))
+	_Ini_Add("Pico Forecast", "txtForecastPause", GUICtrlRead($txtForecastPause))
+	_Ini_Add("Pico Forecast", "cmbForecastHopingSwitchMax", _GUICtrlComboBox_GetCurSel($cmbForecastHopingSwitchMax))
+	_Ini_Add("Pico Forecast", "txtForecastHopingSwitchMax", GUICtrlRead($txtForecastHopingSwitchMax))
+	_Ini_Add("Pico Forecast", "cmbForecastHopingSwitchMin", _GUICtrlComboBox_GetCurSel($cmbForecastHopingSwitchMin))
+	_Ini_Add("Pico Forecast", "txtForecastHopingSwitchMin", GUICtrlRead($txtForecastHopingSwitchMin))
+	_Ini_Add("Pico Forecast", "chkForecastBoost", $iChkForecastBoost ? 1 : 0)
+	_Ini_Add("Pico Forecast", "chkForecastPause", $iChkForecastPause ? 1 : 0)
+	_Ini_Add("Pico Forecast", "chkForecastHopingSwitchMax", $ichkForecastHopingSwitchMax ? 1 : 0)
+	_Ini_Add("Pico Forecast", "chkForecastHopingSwitchMin", $ichkForecastHopingSwitchMin ? 1 : 0)
+	_Ini_Add("Pico Forecast", "cmbSwLang", _GUICtrlComboBox_GetCurSel($cmbSwLang))
 	
 EndFunc   ;==>SaveConfig_PicoMod
 
@@ -324,6 +353,21 @@ Func ApplyConfig_PicoMod($TypeReadSave)
             
 			$g_iChkLabCheck = GUICtrlRead($g_hChkLabCheck) = $GUI_CHECKED ? 1 : 0
 			$g_iChkProfileReport = GUICtrlRead($g_hChkProfileReport) = $GUI_CHECKED ? 1 : 0	
+			
+			; ================================================== Forecast PART ================================================== ;
+			
+			$iChkForecastBoost = (GUICtrlRead($chkForecastBoost) = $GUI_UNCHECKED)
+			$iTxtForecastBoost = GUICtrlRead($txtForecastBoost)
+			$iChkForecastPause = (GUICtrlRead($chkForecastPause) = $GUI_UNCHECKED)
+			$iTxtForecastPause = GUICtrlRead($txtForecastPause)
+			$ichkForecastHopingSwitchMax = (GUICtrlRead($chkForecastHopingSwitchMax) = $GUI_UNCHECKED)
+			$icmbForecastHopingSwitchMax = _GUICtrlComboBox_GetCurSel($cmbForecastHopingSwitchMax)
+			$itxtForecastHopingSwitchMax = GUICtrlRead($txtForecastHopingSwitchMax)
+			$ichkForecastHopingSwitchMin = (GUICtrlRead($chkForecastHopingSwitchMin) = $GUI_UNCHECKED)
+			$icmbForecastHopingSwitchMin = _GUICtrlComboBox_GetCurSel($cmbForecastHopingSwitchMin)
+			$itxtForecastHopingSwitchMin = GUICtrlRead($txtForecastHopingSwitchMin)
+			$icmbSwLang = _GUICtrlComboBox_GetCurSel($cmbSwLang)
+			$iTxtForecastPause = GUICtrlRead($txtForecastPause)
 			
 		Case "Read"
 
@@ -462,6 +506,24 @@ Func ApplyConfig_PicoMod($TypeReadSave)
 			chkLabCheck()
 			GUICtrlSetState($g_hChkProfileReport, $g_iChkProfileReport = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
 			chkProfileReport()
+			
+			; ================================================== Forecast PART ================================================== ;
+			
+			GUICtrlSetState($chkForecastBoost, $iChkForecastBoost = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($txtForecastBoost, $iTxtForecastBoost)
+			chkForecastBoost()
+			GUICtrlSetState($chkForecastPause, $iChkForecastPause = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($txtForecastPause, $iTxtForecastPause)
+			chkForecastPause()
+			GUICtrlSetState($chkForecastHopingSwitchMax, $ichkForecastHopingSwitchMax = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($cmbForecastHopingSwitchMax, $icmbForecastHopingSwitchMax)
+			GUICtrlSetData($txtForecastHopingSwitchMax, $itxtForecastHopingSwitchMax)
+			chkForecastHopingSwitchMax()
+			GUICtrlSetState($chkForecastHopingSwitchMin, $ichkForecastHopingSwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($cmbForecastHopingSwitchMin, $icmbForecastHopingSwitchMin)
+			GUICtrlSetData($txtForecastHopingSwitchMin, $itxtForecastHopingSwitchMin)
+			chkForecastHopingSwitchMin()
+			_GUICtrlComboBox_SetCurSel($cmbSwLang, $icmbSwLang)
 			
 	EndSwitch
 

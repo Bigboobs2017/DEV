@@ -26,6 +26,7 @@
 #include "Pico GoblinXP\Pico GoblinXP.au3"
 #include "Pico GoblinXP\Pico multiSearch.au3"
 #include "Pico GoblinXP\Pico ArrayFunctions.au3"
+#include "Pico Forecast.au3"
 
 #include "Pico Troops Dropping Order\Pico Drop Order GUI.au3"
 #include "Pico Troops Dropping Order\Pico Drop Order.au3"
