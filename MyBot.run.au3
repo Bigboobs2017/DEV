@@ -1154,8 +1154,8 @@ Func _RunFunction($action)
 			BoostWarden()
 
 		Case "LabCheck"
+		    If $g_iChkLabCheck = 0 Then
 			Setlog("Checking Lab Status", $COLOR_INFO)
-			If $g_iChkLabCheck = 0 Then
 			  LabGuiDisplay()
             EndIf
 		Case "Laboratory"
