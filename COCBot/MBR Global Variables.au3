@@ -617,7 +617,7 @@ Global Const $g_aiTroopCostPerLevel[$eTroopCount][9] = [ _
 		[5, 4200, 4800, 5400, 5600 , 6000], _  					; Miner
 		[7, 6, 7, 8, 9, 10, 11, 12], _ 						 	; Minion
 		[7, 40, 45, 52, 58, 65, 90, 115], _					 	; HogRider
-		[5, 70, 100, 130, 160, 190], _ 						 	; Valkyrie
+		[6, 70, 100, 130, 160, 190, 220], _ 				    ; Valkyrie
 		[6, 450, 525, 600, 675, 750, 825], _ 				 	; Golem
 		[3, 250, 350, 450], _ 								 	; Witch
 		[4, 390, 450, 510, 570], _  						 	; Lavahound
@@ -1057,7 +1057,7 @@ Global $g_bDeleteLogs = True, $g_iDeleteLogsDays = 2, $g_bDeleteTemp = True, $g_
 Global $g_bAutoStart = False, $g_iAutoStartDelay = 10
 Global $b_iAutoRestartDelay = 0 ; Automatically restart bot after so many Seconds, 0 = disabled
 Global $g_bCheckGameLanguage = True
-Global $g_bAutoAlignEnable = True, $g_iAutoAlignPosition = 0, $g_iAutoAlignOffsetX = 10, $g_iAutoAlignOffsetY = 10
+Global $g_bAutoAlignEnable = False, $g_iAutoAlignPosition = "EMBED", $g_iAutoAlignOffsetX = "", $g_iAutoAlignOffsetY = ""
 Global $g_bUpdatingWhenMinimized = True ; Alternative Minimize Window routine for bot that enables window updates when minimized
 Global $g_bHideWhenMinimized = False ; Hide bot window in taskbar when minimized
 Global $g_bUseRandomClick = False
@@ -1085,6 +1085,7 @@ Global $g_bForceClanCastleDetection = 0
 #EndRegion GUI Variables
 
 ; Android & MBR window
+Global Const $g_WIN_POS_DEFAULT = 0xFFFFFFF
 Global $g_iFrmBotPosX = -1 ; Position X of the GUI
 Global $g_iFrmBotPosY = -1 ; Position Y of the GUI
 Global $g_iAndroidPosX = -1 ; Position X of the Android Window (undocked)
@@ -1096,6 +1097,7 @@ Global $g_bIsHidden = False ; If hidden or not
 Global $g_aiBSpos[2] ; Inside Android window positions relative to the screen, [x,y]
 Global $g_aiBSrpos[2] ; Inside Android window positions relative to the window, [x,y]
 Global $g_bGUIControlDisabled = False
+
 
 ; Languages
 Global Const $g_sDirLanguages = @ScriptDir & "\Languages\"
@@ -1387,7 +1389,9 @@ Global Const $g_sAnotherDevice = @ScriptDir & "\imgxml\other\device*"
 Global Const $g_sCocStopped = @ScriptDir & "\imgxml\other\CocStopped*"
 Global Const $g_sCocReconnecting = @ScriptDir & "\imgxml\other\CocReconnecting*"
 Global Const $g_sAppRateNever = @ScriptDir & "\imgxml\other\RateNever*"
+Global Const $g_sGfxError = @ScriptDir & "\imgxml\other\GfxError*"
 Global $g_bMinorObstacle = False
+Global $g_bGfxError = False ; True when Android Gfx Errors detected that will initiate Android reboot
 
 ; TakeABreak - Personal Break Timer
 Global Const $g_iTaBChkAttack = 0x01 ; code for PB warning when searching attack
