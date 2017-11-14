@@ -16,7 +16,7 @@
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #Au3Stripper_Parameters=/rsln
 #AutoIt3Wrapper_Change2CUI=y
-#pragma compile(Console, true)
+;#pragma compile(Console, true)
 #pragma compile(Icon, "Images\MyBot.ico")
 #pragma compile(FileDescription, Clash of Clans Bot - A Free Clash of Clans bot - https://mybot.run)
 #pragma compile(ProductName, My Bot Watchdog)
@@ -46,6 +46,8 @@ Global Const $COLOR_DEBUG = $COLOR_PURPLE ; Purple, basic debug color
 
 ; Global Variables
 Global $g_bRunState = True
+Global Const $g_sLibPath = @ScriptDir & "\lib" ;lib directory contains dll's
+Global Const $g_sLibIconPath = $g_sLibPath & "\MBRBOT.dll" ; icon library
 Global $frmBot = 0 ; Dummy form for messages
 Global $g_iGlobalActiveBotsAllowed = 0 ; Dummy
 Global $g_hMutextOrSemaphoreGlobalActiveBots = 0 ; Dummy
@@ -74,7 +76,7 @@ EndFunc
 
 Func SetLog($String, $Color = $COLOR_BLACK, $LogPrefix = "L ")
 	Local $log = $LogPrefix & TimeDebug() & $String
-	ConsoleWrite($log & @CRLF) ; Always write any log to console
+	_ConsoleWrite($log & @CRLF) ; Always write any log to console
 EndFunc   ;==>SetLog
 
 Func SetDebugLog($String, $Color = $COLOR_DEBUG, $LogPrefix = "D ")
@@ -107,6 +109,20 @@ Opt("WinTitleMatchMode", 3) ; Window Title exact match mode
 #include "COCBot\functions\Other\LaunchConsole.au3"
 #include "COCBot\functions\Other\Time.au3"
 
+; Handle Command Line Launch Options and fill $g_asCmdLine
+If $CmdLine[0] > 0 Then
+	For $i = 1 To $CmdLine[0]
+		Switch $CmdLine[$i]
+			Case "/console", "/c", "-console", "-c"
+				_WinAPI_AllocConsole()
+				_WinAPI_SetConsoleIcon($g_sLibIconPath, $eIcnGUI)
+			Case Else
+				$g_asCmdLine[0] += 1
+				ReDim $g_asCmdLine[$g_asCmdLine[0] + 1]
+				$g_asCmdLine[$g_asCmdLine[0]] = $CmdLine[$i]
+		EndSwitch
+	Next
+EndIf
 $hMutex_BotTitle = CreateMutex($sWatchdogMutex)
 If $hMutex_BotTitle = 0 Then
 	;MsgBox($MB_OK + $MB_ICONINFORMATION, $sBotTitle, "My Bot Watchdog is already running.")

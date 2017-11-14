@@ -32,7 +32,7 @@
     - Improve village measuring with secondary images to fix zoom out loop when village cannot be measured (7.3)
 	- Fix Android Window hide/show and manual re-positioning (7.3.1)
 	- Improve bot rebooting Android when Gfx Errors (missing objects) detected (7.3.1)
-	- Fix missing Valkyrie level 6
+	- Fix missing Valkyrie level 6 (7.3.1)
 	- Add Forecast 
 	
  				 Doc Oc v3.7.2                                                           

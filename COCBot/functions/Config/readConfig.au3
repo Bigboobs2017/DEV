@@ -134,28 +134,28 @@ Func ReadRegularConfig()
 	IniReadS($g_iBotDesignFlags, $g_sProfileConfigPath, "general", "botDesignFlags", 0, "int") ; Default for existing profiles is 0, for new is 3
 
 	; Window positions
-	IniReadS($g_iFrmBotPosX, $g_sProfileConfigPath, "general", "frmBotPosX", -1, "int")
-	IniReadS($g_iFrmBotPosY, $g_sProfileConfigPath, "general", "frmBotPosY", -1, "int")
+	IniReadS($g_iFrmBotPosX, $g_sProfileConfigPath, "general", "frmBotPosX", $g_iFrmBotPosX, "int")
+	IniReadS($g_iFrmBotPosY, $g_sProfileConfigPath, "general", "frmBotPosY", $g_iFrmBotPosY, "int")
 	If $g_iFrmBotPosX < -30000 Or $g_iFrmBotPosY < -30000 Then
 		; bot window was minimized, restore default position
-		$g_iFrmBotPosX = -1
-		$g_iFrmBotPosY = -1
+		$g_iFrmBotPosX = $g_WIN_POS_DEFAULT
+		$g_iFrmBotPosY = $g_WIN_POS_DEFAULT
 	EndIf
 
-	IniReadS($g_iAndroidPosX, $g_sProfileConfigPath, "general", "AndroidPosX", -1, "int")
-	IniReadS($g_iAndroidPosY, $g_sProfileConfigPath, "general", "AndroidPosY", -1, "int")
+	IniReadS($g_iAndroidPosX, $g_sProfileConfigPath, "general", "AndroidPosX", $g_iAndroidPosX, "int")
+	IniReadS($g_iAndroidPosY, $g_sProfileConfigPath, "general", "AndroidPosY", $g_iAndroidPosY, "int")
 	If $g_iAndroidPosX < -30000 Or $g_iAndroidPosY < -30000 Then
 		; bot window was minimized, restore default position
-		$g_iAndroidPosX = -1
-		$g_iAndroidPosY = -1
+		$g_iAndroidPosX = $g_WIN_POS_DEFAULT
+		$g_iAndroidPosY = $g_WIN_POS_DEFAULT
 	EndIf
 
-	IniReadS($g_iFrmBotDockedPosX, $g_sProfileConfigPath, "general", "frmBotDockedPosX", -1, "int")
-	IniReadS($g_iFrmBotDockedPosY, $g_sProfileConfigPath, "general", "frmBotDockedPosY", -1, "int")
+	IniReadS($g_iFrmBotDockedPosX, $g_sProfileConfigPath, "general", "frmBotDockedPosX", $g_iFrmBotDockedPosX, "int")
+	IniReadS($g_iFrmBotDockedPosY, $g_sProfileConfigPath, "general", "frmBotDockedPosY", $g_iFrmBotDockedPosY, "int")
 	If $g_iFrmBotDockedPosX < -30000 Or $g_iFrmBotDockedPosY < -30000 Then
 		; bot window was minimized, restore default position
-		$g_iFrmBotDockedPosX = -1
-		$g_iFrmBotDockedPosY = -1
+		$g_iFrmBotDockedPosX = $g_WIN_POS_DEFAULT
+		$g_iFrmBotDockedPosY = $g_WIN_POS_DEFAULT
 	EndIf
 
 	; Redraw mode:  0 = disabled, 1 = Redraw always entire bot window, 2 = Redraw only required bot window area (or entire bot if control not specified)
@@ -1059,7 +1059,7 @@ Func ReadConfig_600_35()
 	If $g_bBotLaunchOption_Autostart = True Then $g_bRestarted = True
 	$g_bCheckGameLanguage = (IniRead($g_sProfileConfigPath, "General", "ChkLanguage", "1") = "1")
 	IniReadS($g_bAutoAlignEnable, $g_sProfileConfigPath, "general", "DisposeWindows", False, "Bool")
-	IniReadS($g_iAutoAlignPosition, $g_sProfileConfigPath, "general", "DisposeWindowsPos", "SNAP-TR")
+	IniReadS($g_iAutoAlignPosition, $g_sProfileConfigPath, "general", "DisposeWindowsPos", "EMBED")
 	IniReadS($g_iAutoAlignOffsetX, $g_sProfileConfigPath, "other", "WAOffsetX", "")
 	IniReadS($g_iAutoAlignOffsetY, $g_sProfileConfigPath, "other", "WAOffsetY", "")
 	;$g_bUpdatingWhenMinimized must be always enabled

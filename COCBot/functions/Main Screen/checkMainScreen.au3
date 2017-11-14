@@ -44,7 +44,7 @@ Func checkMainScreen($Check = True) ;Checks if in main screen
 		WinGetAndroidHandle()
 		If $g_bChkBackgroundMode = False And $g_hAndroidWindow <> 0 Then
 			; ensure android is top
-			AndroidToFront()
+			AndroidToFront(Default, "checkMainScreen")
 		EndIf
 		If $g_bAndroidAdbScreencap = False And _WinAPI_IsIconic($g_hAndroidWindow) Then WinSetState($g_hAndroidWindow, "", @SW_RESTORE)
 	EndIf
