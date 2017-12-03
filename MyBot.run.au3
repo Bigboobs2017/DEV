@@ -124,7 +124,6 @@ Func InitializeBot()
 	; initialize bot title
 	UpdateBotTitle()
 
-	InitAndroidConfig()
 
 	If FileExists(@ScriptDir & "\EnableMBRDebug.txt") Then ; Set developer mode
 		$g_bDevMode = True
@@ -568,6 +567,8 @@ Func MainLoop()
 		If $g_bRestarted = True Then $iDelay = 0
 		$iStartDelay = $iDelay * 1000
 		$g_iBotAction = $eBotStart
+		; check if android should be hidden
+		If $g_bBotLaunchOption_HideAndroid Then $g_bIsHidden = True
 	EndIf
 
 	While 1

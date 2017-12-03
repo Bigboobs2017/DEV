@@ -34,6 +34,14 @@
 	- Improve bot rebooting Android when Gfx Errors (missing objects) detected (7.3.1)
 	- Fix missing Valkyrie level 6 (7.3.1)
 	- Add Forecast 
+	- Add BlueStacks 3.50.x support (7.3.2)
+	- Add Nox 6.0.0 support (7.3.2)
+	- Add Unlimited Boost Option (7.3.2)
+	- Add Android option to close Android when bot exists (7.3.2)
+	- Add Android Lollipop support tested with Nox 6.0.0 and MEmu 3.6.2, support system messages are out of sync, other device connected, rate CoC and general error (7.3.2)
+	- Fix Android Window positioning and force Android Window always on top when background mode disabled (7.3.2)
+	- Fix ADB path favoring current Android Emulator, save path in profile.ini and allow to rename/delete Android ADB.EXE to improve multi-bot environments of different vendors (7.3.2)
+	- Add Android Emulator, Instance and Device information to ADB Shell Console Window (7.3.2) 
 	
  				 Doc Oc v3.7.2                                                           
 	- Fixed the Loot OCR for 480000 , 600000 , 1000000

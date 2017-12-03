@@ -28,7 +28,7 @@ EndFunc   ;==>readConfig
 
 Func ReadProfileConfig($sIniFile = $g_sProfilePath & "\profile.ini")
 	If FileExists($sIniFile) = 0 Then Return False
-	Local $iValue
+	Local $iValue, $sValue
 	; defaultprofile read not required
 	;$g_sProfileCurrentName = StringRegExpReplace(IniRead($sIniFile, "general", "defaultprofile", ""), '[/:*?"<>|]', '_')
 
@@ -44,7 +44,10 @@ Func ReadProfileConfig($sIniFile = $g_sProfilePath & "\profile.ini")
 	If $iValue <> $g_iGlobalThreads Then
 		SetDebugLog("Threading: Using " & $g_iGlobalThreads & " threads shared across all bot instances changed to " & $iValue)
 	EndIf
-
+    
+	$sValue = IniRead($sIniFile, "general", "adb.path", $g_sAndroidAdbPath)
+	If FileExists($sValue) Then $g_sAndroidAdbPath = $sValue
+	
 	Return True
 EndFunc   ;==>ReadProfileConfig
 
@@ -304,7 +307,8 @@ Func ReadConfig_Android()
 	$g_iAndroidInactiveTransparency = Int(IniRead($g_sProfileConfigPath, "android", "inactive.transparency", $g_iAndroidInactiveTransparency))
 	$g_iAndroidSuspendModeFlags = Int(IniRead($g_sProfileConfigPath, "android", "suspend.mode", $g_iAndroidSuspendModeFlags))
 	$g_iAndroidRebootHours = Int(IniRead($g_sProfileConfigPath, "android", "reboot.hours", $g_iAndroidRebootHours))
-
+    $g_bAndroidCloseWithBot = Int(IniRead($g_sProfileConfigPath, "android", "close", $g_bAndroidCloseWithBot ? 1 : 0)) = 1
+	
 	If $g_bBotLaunchOption_Restart = True Then
 		; for now only read when bot crashed and restarted through watchdog or nofify event
 		Local $sAndroidEmulator = IniRead($g_sProfileConfigPath, "android", "emulator", "")

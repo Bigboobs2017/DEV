@@ -137,6 +137,14 @@ Func InitiateLayout()
 EndFunc   ;==>InitiateLayout
 
 Func chkBackground()
+	If IsDeclared("g_hChkBackgroundMode") Then
+		UpdateChkBackground()
+		; update Android Window always on top
+		AndroidToFront(Default, "chkBackground")
+	EndIf
+EndFunc   ;==>chkBackground
+
+Func UpdateChkBackground()
 	If GUICtrlRead($g_hChkBackgroundMode) = $GUI_CHECKED Then
 		$g_bChkBackgroundMode = True
 		updateBtnHideState($GUI_ENABLE)
