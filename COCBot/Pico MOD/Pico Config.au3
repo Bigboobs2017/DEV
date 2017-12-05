@@ -129,7 +129,23 @@ Func ReadConfig_PicoMod()
 	IniReadS($itxtForecastHopingSwitchMin, $g_sProfileConfigPath, "Pico Forecast", "txtForecastHopingSwitchMin", 2, "Int")
 	IniReadS($icmbSwLang, $g_sProfileConfigPath, "Pico Forecast", "cmbSwLang", 1, "int")
 	
+	; ================================================== Chat PART ================================================== ;
 	
+	IniReadS($ChatbotChatGlobal, $g_sProfileConfigPath, "Pico Chatbot", "chkGlobalChat", $ChatbotChatGlobal, "Int")
+	IniReadS($ChatbotScrambleGlobal, $g_sProfileConfigPath, "Pico Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal, "Int")
+	IniReadS($iTxtGlobChatTimeDalay, $g_sProfileConfigPath, "Pico Chatbot", "TxtGlobChatTimeDalay", 0 ,"Int")
+	IniReadS($ChatbotSwitchLang, $g_sProfileConfigPath, "Pico Chatbot", "chkSwitchLang", $ChatbotSwitchLang, "Int")
+	IniReadS($icmbLang, $g_sProfileConfigPath, "Pico Chatbot", "cmbLang", 8, "int")
+	IniReadS($ChatbotChatClan, $g_sProfileConfigPath, "Pico Chatbot", "chkClanChat", $ChatbotChatClan, "Int")
+	IniReadS($ChatbotClanUseResponses, $g_sProfileConfigPath, "Pico Chatbot", "chkUseResponses", $ChatbotClanUseResponses, "Int")
+	IniReadS($ChatbotClanAlwaysMsg, $g_sProfileConfigPath, "Pico Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg, "Int")
+	IniReadS($ChatbotUseNotify, $g_sProfileConfigPath, "Pico Chatbot", "chkChatNotify", $ChatbotUseNotify, "Int")
+	IniReadS($ChatbotPbSendNew, $g_sProfileConfigPath, "Pico Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew, "Int")	
+	;IniReadS($editGlobalMessages1, $g_sProfileConfigPath, "Pico Chatbot", "chkPbSendNewChats", $editGlobalMessages1, "Int")
+	$editGlobalMessages1 = IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications")
+	$editGlobalMessages2 = IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg2", "Join now|Apply now")
+	$editGlobalMessages3 = IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars")
+	$editGlobalMessages4 = IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg4", "Adults Only| 18+")
 EndFunc   ;==>ReadConfig_PicoMod
 
 Func SaveConfig_PicoMod()
@@ -247,6 +263,26 @@ Func SaveConfig_PicoMod()
 	_Ini_Add("Pico Forecast", "chkForecastHopingSwitchMin", $ichkForecastHopingSwitchMin ? 1 : 0)
 	_Ini_Add("Pico Forecast", "cmbSwLang", _GUICtrlComboBox_GetCurSel($cmbSwLang))
 	
+	; ================================================== Chat PART ================================================== ;
+	
+	_Ini_Add("Pico Chatbot", "chkGlobalChat", $ChatbotChatGlobal)
+	_Ini_Add("Pico Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal)
+	_Ini_Add("Pico Chatbot", "TxtGlobChatTimeDalay", GUICtrlRead($TxtGlobChatTimeDalay))
+    _Ini_Add("Pico Chatbot", "chkSwitchLang", $ChatbotSwitchLang)
+	_Ini_Add("Pico Chatbot", "cmbLang", _GUICtrlComboBox_GetCurSel($cmbLang))
+	_Ini_Add("Pico Chatbot", "chkClanChat", $ChatbotChatClan)
+	_Ini_Add("Pico Chatbot", "chkUseResponses", $ChatbotClanUseResponses)
+	_Ini_Add("Pico Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg)
+	_Ini_Add("Pico Chatbot", "chkChatNotify", $ChatbotUseNotify)
+	_Ini_Add("Pico Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew)   
+   
+   _Ini_Add("Pico Chatbot", "globalMsg1", $glb1)
+		_Ini_Add("Pico Chatbot", "globalMsg2", $glb2)
+		_Ini_Add("Pico Chatbot", "globalMsg3", $glb3)
+		_Ini_Add("Pico Chatbot", "globalMsg4", $glb4)
+
+	_Ini_Add("Pico Chatbot", "genericMsgClan", $cGeneric)
+	_Ini_Add("Pico Chatbot", "responseMsgClan", $cResp)	
 EndFunc   ;==>SaveConfig_PicoMod
 
 Func ApplyConfig_PicoMod($TypeReadSave)
@@ -368,7 +404,18 @@ Func ApplyConfig_PicoMod($TypeReadSave)
 			$itxtForecastHopingSwitchMin = GUICtrlRead($txtForecastHopingSwitchMin)
 			$icmbSwLang = _GUICtrlComboBox_GetCurSel($cmbSwLang)
 			$iTxtForecastPause = GUICtrlRead($txtForecastPause)
+			; ================================================== Chat PART ================================================== ;
 			
+			$ChatbotChatGlobal = GUICtrlRead($chkGlobalChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotScrambleGlobal = GUICtrlRead($chkGlobalScramble) = $GUI_CHECKED ? 1 : 0
+			$iTxtGlobChatTimeDalay = GUICtrlRead($TxtGlobChatTimeDalay)
+			$ChatbotSwitchLang = GUICtrlRead($chkSwitchLang) = $GUI_CHECKED ? 1 : 0
+			$icmbLang = _GUICtrlComboBox_GetCurSel($cmbLang)
+			$ChatbotChatClan = GUICtrlRead($chkClanChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanUseResponses = GUICtrlRead($chkUseResponses) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanAlwaysMsg = GUICtrlRead($chkUseGeneric) = $GUI_CHECKED ? 1 : 0
+			$ChatbotUseNotify = GUICtrlRead($chkChatNotify) = $GUI_CHECKED ? 1 : 0
+			$ChatbotPbSendNew = GUICtrlRead($chkPbSendNewChats) = $GUI_CHECKED ? 1 : 0		
 		Case "Read"
 
 			GUICtrlSetState($g_hChkRequestUnicode, $g_iChkRequestUnicode = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
@@ -524,6 +571,27 @@ Func ApplyConfig_PicoMod($TypeReadSave)
 			GUICtrlSetData($txtForecastHopingSwitchMin, $itxtForecastHopingSwitchMin)
 			chkForecastHopingSwitchMin()
 			_GUICtrlComboBox_SetCurSel($cmbSwLang, $icmbSwLang)
+			
+			; ================================================== Chat PART ================================================== ;
+			
+			GUICtrlSetState($chkGlobalChat, $ChatbotChatGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkGlobalScramble, $ChatbotScrambleGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($TxtGlobChatTimeDalay, $iTxtGlobChatTimeDalay)
+			GUICtrlSetState($chkSwitchLang, $ChatbotSwitchLang = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)			
+			_GUICtrlComboBox_SetCurSel($cmbLang, $icmbLang)
+			GUICtrlSetState($chkClanChat, $ChatbotChatClan = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkUseResponses, $ChatbotClanUseResponses = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkUseGeneric, $ChatbotClanAlwaysMsg = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkChatNotify, $ChatbotUseNotify = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkPbSendNewChats, $ChatbotPbSendNew = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkGlobalChat()
+			chkGlobalScramble()
+			chkSwitchLang()
+			chkClanChat()
+			chkUseResponses()
+			chkUseGeneric()
+			chkChatNotify()
+			chkPbSendNewChats()			
 			
 	EndSwitch
 

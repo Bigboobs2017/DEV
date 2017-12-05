@@ -73,12 +73,19 @@ Global $chkSXBK = 0 , $chkSXAQ = 0 , $chkSXGW = 0
 Global $DocXP1 = 0 , $DocXP2 = 0 , $DocXP3 = 0 ,$DocXP4 = 0
 Global $lblXPatStart = 0 , $lblXPCurrent = 0 , $lblXPSXWon = 0 , $lblXPSXWonHour = 0
 
+; ================================================== Chat FEATURES PART ================================================== ;
+Global $cmblang = 0, $icmblang = 8
+Global $chkGlobalChat = 0,$chkGlobalScramble = 0,$chkSwitchLang = 0,$TxtGlobChatTimeDalay = 0, $chkClanChat = 0
+Global $chkUseResponses = 0,$chkUseGeneric = 0,$chkChatNotify = 0,$chkPbSendNewChats = 0
+Global $editGlobalMessages1 = "", $editGlobalMessages2 = "",$editGlobalMessages3 = "",$editGlobalMessages4 = ""
+Global $editResponses = 0,$editGeneric = 0,$ChatbotQueuedChats[0],$ChatbotReadQueued = False,$ChatbotReadInterval = 0,$ChatbotIsOnInterval = False,$TmpResp
+Global $g_alblAinGlobal,$g_alblSGchats,$g_alblSwitchlang,$g_alblChatclan,$g_alblUsecustomresp,$g_alblUsegenchats,$g_alblNotifyclanchat,$g_alblSwitchlang,$g_alblUseremotechat,$g_alblTimeDalay
 Global $g_hGUI_MOD = 0
 
 ; For future child Tabs
 ; #include "MBR GUI Design Child MOD - ITEMXXX.au3"
 ; The Child Tabs
-Global $g_hGUI_MOD_TAB = 0, $g_hGUI_MOD_TAB_ITEM1 = 0, $g_hGUI_MOD_TAB_ITEM2 = 0, $g_hGUI_MOD_TAB_ITEM3 = 0, $g_hGUI_MOD_TAB_ITEM4 = 0, $g_hGUI_MOD_TAB_ITEM5 = 0, $g_hGUI_MOD_TAB_ITEM6 = 0, $g_hGUI_MOD_TAB_ITEM7 = 0
+Global $g_hGUI_MOD_TAB = 0, $g_hGUI_MOD_TAB_ITEM1 = 0, $g_hGUI_MOD_TAB_ITEM2 = 0, $g_hGUI_MOD_TAB_ITEM3 = 0, $g_hGUI_MOD_TAB_ITEM4 = 0, $g_hGUI_MOD_TAB_ITEM5 = 0, $g_hGUI_MOD_TAB_ITEM6 = 0, $g_hGUI_MOD_TAB_ITEM7 = 0, $g_hGUI_MOD_TAB_ITEM8 = 0
 
 Func CreateMODTab()
 
@@ -102,6 +109,8 @@ Func CreateMODTab()
 	$g_hGUI_MOD_TAB_ITEM7 = GUICtrlCreateTabItem("Forecast")
     TabItem7()
 	; needed to init the window now, like if it's a tab
+    $g_hGUI_MOD_TAB_ITEM8 = GUICtrlCreateTabItem("Chat")
+	TabItem8()
 	CreateDropOrderGUI()
 
 	GUICtrlCreateTabItem("")
@@ -696,3 +705,100 @@ $y += 100 + 220
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 	setupProfileComboBox()
 EndFunc   ;==>TabItem7
+#include <Process.au3>
+#include <Array.au3>
+#include <WinAPIEx.au3>
+Func TabItem8()
+
+    ChatbotReadSettings()	
+	Local $x = 10, $y = 130
+
+   GUICtrlCreateGroup("Global Chat", 16 - $x, 160 - $y , 438, 208)
+    
+   $chkGlobalChat = GUICtrlCreateCheckbox("Advertise in global", 32 - $x, 184 - $y, 105, 17)
+	_GUICtrlSetTip($chkGlobalChat, "Use global chat to send messages")
+   GUICtrlSetState($chkGlobalChat, $ChatbotChatGlobal)
+   GUICtrlSetOnEvent(-1, "chkGlobalChat")
+	
+   
+   $chkGlobalScramble = GUICtrlCreateCheckbox("Scramble global chats", 32 - $x, 205 - $y, 125, 17)
+	_GUICtrlSetTip($chkGlobalScramble, "Scramble the message pieces defined in the textboxes below to be in a random order")
+   GUICtrlSetState($chkGlobalScramble, $ChatbotScrambleGlobal)
+   GUICtrlSetOnEvent(-1, "chkGlobalScramble")
+   
+   
+   $g_alblTimeDalay = GUICtrlCreateLabel("Time Dalay", 46 - $x, 232 - $y, 55, 17)
+   $TxtGlobChatTimeDalay = GUICtrlCreateInput("0", 120 - $x, 230 - $y, 30, 21, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+   _GUICtrlSetTip($TxtGlobChatTimeDalay, "Global Chat time dalay in seconds.")
+   GUICtrlSetLimit(-1, 3)
+  ;GUICtrlSetOnEvent(-1, "txtGlobChatTimeDalay")
+   GUICtrlSetState($TxtGlobChatTimeDalay, $iTxtGlobChatTimeDalay)
+   
+   $chkSwitchLang = GUICtrlCreateCheckbox("Switch languages", 176 - $x, 184 - $y, 81, 17)
+	_GUICtrlSetTip($chkSwitchLang, "Switch languages after spamming for a new global chatroom")
+   GUICtrlSetState($chkSwitchLang, $ChatbotSwitchLang)
+   GUICtrlSetOnEvent(-1, "chkSwitchLang")   
+	;======kychera===========
+   $cmbLang = GUICtrlCreateCombo("", 280 - $x, 184 - $y, 50, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+   GUICtrlSetData(-1, "FR|DE|ES|IT|NL|NO|PR|TR|RU", "RU")
+   ;==========================
+   
+   $editGlobalMessages1 = GUICtrlCreateEdit(_ArrayToString($GlobalMessages1, @CRLF), 24 - $x, 261 - $y, 420, 49)
+   GUICtrlSetTip($editGlobalMessages1, "Take one item randomly from this list (one per line) and add it to create a message to send to global")
+   GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+   
+   $editGlobalMessages2 = GUICtrlCreateEdit(_ArrayToString($GlobalMessages2, @CRLF), 24 - $x, 312 - $y, 420, 49)
+   GUICtrlSetTip($editGlobalMessages2, "Take one item randomly from this list (one per line) and add it to create a message to send to global")
+   GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+   
+   ;$editGlobalMessages3 = GUICtrlCreateEdit(_ArrayToString($GlobalMessages3, @CRLF), $x - 15, $y, 202, 65)
+  ; GUICtrlSetTip($editGlobalMessages3, "Take one item randomly from this list (one per line) and add it to create a message to send to global")
+   ;GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+   ;$y += 65
+   ;$editGlobalMessages4 = GUICtrlCreateEdit(_ArrayToString($GlobalMessages4, @CRLF), $x - 15, $y, 202, 55)
+   ;GUICtrlSetTip($editGlobalMessages4, "Take one item randomly from this list (one per line) and add it to create a message to send to global")
+   ;GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+   ;$y += 65
+   GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	;Local $x = 245, $y = 47
+
+   GUICtrlCreateGroup("Clan Chat", 16 - $x, 370 - $y, 438, 190)
+   
+   $chkClanChat = GUICtrlCreateCheckbox("Chat in clan chat", 32 - $x, 390 - $y, 97, 17)
+	_GUICtrlSetTip($chkClanChat, "Use clan chat to send messages")
+   GUICtrlSetState($chkClanChat, $ChatbotChatClan)
+   GUICtrlSetOnEvent(-1, "chkClanChat")   
+   
+   $chkUseResponses = GUICtrlCreateCheckbox("Use custom responses", 32 - $x, 410 - $y, 125, 17)
+   GUICtrlSetTip($chkUseResponses, "Use the keywords and responses defined below")
+   GUICtrlSetState($chkUseResponses, $ChatbotClanUseResponses)
+   GUICtrlSetOnEvent(-1, "chkUseResponses")   
+   
+   $chkUseGeneric = GUICtrlCreateCheckbox("Use generic chats", 32 - $x, 430 - $y, 97, 17)
+   GUICtrlSetTip($chkUseGeneric, "Use generic chats if reading the latest chat failed or there are no new chats")
+   GUICtrlSetState($chkUseGeneric, $ChatbotClanAlwaysMsg)
+   GUICtrlSetOnEvent(-1, "chkUseGeneric")   
+   
+   $chkChatNotify = GUICtrlCreateCheckbox("Use remote for chatting", 32 - $x, 480 - $y, 125, 17)
+   GUICtrlSetTip($chkChatNotify, "Send and recieve chats via pushbullet or telegram." & @CRLF & "Use BOT <myvillage> GETCHATS <interval|NOW|STOP> to get the latest clan" & @CRLF &  "chat as an image, and BOT <myvillage> SENDCHAT <chat message> to send a chat to your clan") 
+   GUICtrlSetState($chkChatNotify, $ChatbotUseNotify)
+   GUICtrlSetOnEvent(-1, "chkChatNotify")  
+   
+   $chkPbSendNewChats = GUICtrlCreateCheckbox("Notify me new chat clan", 32 - $x, 500 - $y, 125, 17)
+   GUICtrlSetTip($chkPbSendNewChats, "Will send an image of your clan chat via pushbullet & telegram when a new chat is detected. Not guaranteed to be 100% accurate.")
+   GUICtrlSetState($chkPbSendNewChats, $ChatbotPbSendNew)
+   GUICtrlSetOnEvent(-1, "chkPbSendNewChats")   
+   
+
+   $editResponses = GUICtrlCreateEdit(_ArrayToString($ClanResponses, ":", -1, -1, @CRLF), 200 - $x, 380 - $y, 217, 81)
+   GUICtrlSetTip($editResponses, "Look for the specified keywords in clan messages and respond with the responses. One item per line, in the format keyword:response")
+   GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+   
+   $editGeneric = GUICtrlCreateEdit(_ArrayToString($ClanMessages, @CRLF), 200 - $x, 470 - $y, 217, 81)
+   GUICtrlSetTip($editGeneric, "Generic messages to send, one per line")
+   GUICtrlSetOnEvent(-1, "ChatGuiEditUpdate")
+      
+   GUICtrlCreateGroup("", -99, -99, 1, 1)
+   
+EndFunc   ;==>TabItem8

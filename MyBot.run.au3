@@ -843,6 +843,9 @@ Func Idle() ;Sequence that runs until Full Army
 		NotifyPendingActions()
 		If _Sleep($DELAYIDLE1) Then Return
 		If $g_iCommandStop = -1 Then SetLog("====== Waiting for full army ======", $COLOR_SUCCESS)
+		If $ChatbotChatGlobal = True Or $ChatbotChatClan = True Then
+		ChatbotMessage()
+		EndIf
 		Local $hTimer = __TimerInit()
 		Local $iReHere = 0
 		;PrepareDonateCC()
@@ -1011,6 +1014,9 @@ Func AttackMain() ;Main control for attack functions
 				SetLog(_PadStringCenter(" Hero status check" & BitAND($g_aiAttackUseHeroes[$LB], $g_aiSearchHeroWaitEnable[$LB], $g_iHeroAvailable) & "|" & $g_aiSearchHeroWaitEnable[$LB] & "|" & $g_iHeroAvailable, 54, "="), $COLOR_DEBUG)
 				;Setlog("BullyMode: " & $g_abAttackTypeEnable[$TB] & ", Bully Hero: " & BitAND($g_aiAttackUseHeroes[$g_iAtkTBMode], $g_aiSearchHeroWaitEnable[$g_iAtkTBMode], $g_iHeroAvailable) & "|" & $g_aiSearchHeroWaitEnable[$g_iAtkTBMode] & "|" & $g_iHeroAvailable, $COLOR_DEBUG)
 			EndIf
+			If $ChatbotChatGlobal = true or $ChatbotChatClan = True Then
+			ChatbotMessage()
+			EndIf
 			PrepareSearch()
 			If $g_bOutOfGold = True Then Return ; Check flag for enough gold to search
 			If $g_bRestart = True Then Return
@@ -1128,6 +1134,10 @@ Func _RunFunction($action)
 				;If SkipDonateNearFullTroops(True) = False Then DonateCC()
 				If _Sleep($DELAYRUNBOT1) = False Then checkMainScreen(False)
 			EndIf
+		Case "SendChat"
+		    If $ChatbotChatGlobal = True Or $ChatbotChatClan = True Then
+               ChatbotMessage()
+		    EndIf
 		Case "DonateCC,Train"
 			If $g_iActiveDonate And $g_bChkDonate Then
 				If SkipDonateNearFullTroops(True) = False And BalanceDonRec(True) Then DonateCC()
