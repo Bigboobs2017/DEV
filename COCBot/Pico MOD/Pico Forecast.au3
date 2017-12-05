@@ -172,7 +172,7 @@ Func readCurrentForecast()
 	While 1
 		$line = FileReadLine($file)
 		If @error <> 0 Then ExitLoop
-		if StringCompare(StringLeft($line, StringLen("<script language=""javascript"">var militaryTime")), "<script language=""javascript"">var militaryTime") = 0 Then
+		If StringCompare(StringLeft($line, StringLen("<script language=""javascript"">var militaryTime")), "<script language=""javascript"">var militaryTime") = 0 Then
 			Local $pos1
 			Local $pos2
 			$pos1 = StringInStr($line, "minuteNow")
@@ -313,11 +313,11 @@ Func CalculateIndex($minutes)
 	SetLog("Viewing weather information ...", $COLOR_PURPLE)
 	If $iRound1 <= $index25 Then
 	SetLog("Index of Loot : " & $iRound1 & " ---> Awful!", $COLOR_RED)
-	Elseif $iRound1 > $index25 and $iRound1 <= $index4 Then
+	Elseif $iRound1 > $index25 And $iRound1 <= $index4 Then
 	SetLog("Index of Loot : " & $iRound1 & " ---> Bad", $COLOR_DEEPPINK)
-	Elseif $iRound1 > $index4 and $iRound1 <= $index6 Then
+	Elseif $iRound1 > $index4 And $iRound1 <= $index6 Then
 	SetLog("Index of Loot  : " & $iRound1 & " ---> Fine", $COLOR_ORANGE)
-	ElseIf $iRound1 > $index6 and $iRound1 <= $index8 Then
+	ElseIf $iRound1 > $index6 And $iRound1 <= $index8 Then
 	SetLog("Index of Loot : " & $iRound1 & " ---> Good!", $COLOR_GREEN)
 	ElseIf $iRound1 > $index8 Then
 	SetLog("Index of Loot  : " & $iRound1 & " ---> Perfect !!", $COLOR_DARKGREEN)

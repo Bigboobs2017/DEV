@@ -124,7 +124,6 @@ Func InitializeBot()
 	; initialize bot title
 	UpdateBotTitle()
 
-	InitAndroidConfig()
 
 	If FileExists(@ScriptDir & "\EnableMBRDebug.txt") Then ; Set developer mode
 		$g_bDevMode = True
@@ -568,6 +567,8 @@ Func MainLoop()
 		If $g_bRestarted = True Then $iDelay = 0
 		$iStartDelay = $iDelay * 1000
 		$g_iBotAction = $eBotStart
+		; check if android should be hidden
+		If $g_bBotLaunchOption_HideAndroid Then $g_bIsHidden = True
 	EndIf
 
 	While 1
@@ -636,7 +637,9 @@ Func runBot() ;Bot that runs everything in order
 		If $g_bRestart = True Then ContinueLoop
 		chkShieldStatus()
 		If $g_bRestart = True Then ContinueLoop
-
+        checkObstacles() ; trap common error messages also check for reconnecting animation
+		If $g_bRestart = True Then ContinueLoop
+		
 		; ================================================== GTFO PART ================================================== ;
 		;MainGTFO()
 		; ================================================ End GTFO PART ================================================ ;

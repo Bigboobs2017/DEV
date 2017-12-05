@@ -1,6 +1,6 @@
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: chkLabCheck
-; Description ...: This file is all related to Gaining XP by Attacking to Goblin Picninc Signle player
+; Description ...: 
 ; Syntax ........:
 ; Parameters ....: None
 ; Return values .: None

@@ -94,7 +94,7 @@ Func CreateBottomPanel()
 		   GUICtrlSetState(-1, $GUI_HIDE)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-   If $g_bAndroidAdbScreencap = True Then chkBackground() ; update background mode GUI
+   If $g_bAndroidAdbScreencap = True Then UpdateChkBackground() ; update background mode GUI
 
    ;$g_hPicTwoArrowShield = _GUICtrlCreateIcon($g_sLibIconPath, $eIcn2Arrow, $x + 190, $y + 10, 48, 48)
 	;GUICtrlSetState(-1, $GUI_HIDE); HIDE FOR ROYAL LAB STATUS

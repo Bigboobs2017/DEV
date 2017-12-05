@@ -137,6 +137,14 @@ Func InitiateLayout()
 EndFunc   ;==>InitiateLayout
 
 Func chkBackground()
+	If IsDeclared("g_hChkBackgroundMode") Then
+		UpdateChkBackground()
+		; update Android Window always on top
+		AndroidToFront(Default, "chkBackground")
+	EndIf
+EndFunc   ;==>chkBackground
+
+Func UpdateChkBackground()
 	If GUICtrlRead($g_hChkBackgroundMode) = $GUI_CHECKED Then
 		$g_bChkBackgroundMode = True
 		updateBtnHideState($GUI_ENABLE)
@@ -241,14 +249,14 @@ Func updateBtnHideState($newState = $GUI_ENABLE)
 EndFunc   ;==>updateBtnHideState
 
 Func btnHide()
-	If $g_bIsHidden = False Then
+	If Not $g_bIsHidden Then
 		GUICtrlSetData($g_hBtnHide, GetTranslatedFileIni("MBR GUI Control Bottom", "Func_btnHide_False", "Show"))
-		HideAndroidWindow(True)
 		$g_bIsHidden = True
-	ElseIf $g_bIsHidden = True Then
+		HideAndroidWindow(True, Default, Default, "btnHide")
+	ElseIf $g_bIsHidden Then
 		GUICtrlSetData($g_hBtnHide, GetTranslatedFileIni("MBR GUI Control Bottom", "Func_btnHide_True", "Hide"))
-		HideAndroidWindow(False)
 		$g_bIsHidden = False
+		HideAndroidWindow(False, Default, Default, "btnHide")
 	EndIf
 EndFunc   ;==>btnHide
 
