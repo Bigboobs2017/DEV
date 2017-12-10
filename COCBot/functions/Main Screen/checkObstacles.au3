@@ -61,10 +61,10 @@ Func _checkObstacles() ;Checks if something is in the way for mainscreen
 		If $g_iDebugSetlog = 1 Then SetLog("33B5E5=>true, 282828=>false", $COLOR_DEBUG)
 		;;;;;;;##### 1- Another device #####;;;;;;;
 		$Result = getOcrMaintenanceTime(184, 325 + $g_iMidOffsetY, "Another Device OCR:") ; OCR text to find Another device message
-		Local $sDirectory = $g_sImgAnotherDevice
+		Local $sDirectory = $g_sAnotherDevice
 		Local $sRegion = "220,330(80,60)"
 		If $g_iAndroidVersionAPI >= $g_iAndroidLollipop Then
-			$sDirectory = $g_sImgAnotherDeviceLollipop
+			$sDirectory = $g_sAnotherDeviceLollipop
 		EndIf
 		If StringInStr($Result, "device", $STR_NOCASESENSEBASIC) Or _
 				UBound(decodeSingleCoord(FindImageInPlace("Device", $sDirectory, $sRegion, False))) > 1 Then
